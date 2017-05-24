@@ -22,11 +22,12 @@ parser code {:
 :}
 
 
-terminal		ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,ASGN,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COMMA,COLON,IDENT,INTLIT;
+terminal		ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,ASGN,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COMMA,COLON;
+terminal Integer INTLIT;
+terminal String IDENT;
+non terminal		MatchSign,Operator,Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions,Ausdruck;
 
-non terminal		Program,TypV,Prozedur;
-
-start with program;
+start with Program;
 
 
 Program::=|
@@ -35,8 +36,7 @@ Program::=|
       Prozedur Program
       ;
 
-TypV::=
-TYPE IDENT EQ Typ SEMIC
+TypV::=TYPE IDENT EQ Typ SEMIC
 ;
 
 Typ::=
@@ -45,24 +45,59 @@ IDENT
 Array
 ;
 
-Array::=ARRAY LBRACK INLIT RBRACK OF Array |
-ARRAY LBRACK INLIT RBRACK OF IDENT
+Array::=ARRAY LBRACK INTLIT RBRACK OF Array |
+ARRAY LBRACK INTLIT RBRACK OF IDENT
 ;
 
 Prozedur::=
 PROC IDENT LPAREN Paralist RPAREN LCURL Deklaration StmtList RCURL|
-PROC IDENT LPAREN Deklaration RPAREN LCURL Deklaration StmtList RCURL|
 PROC IDENT LPAREN  RPAREN LCURL Deklaration StmtList RCURL|
 PROC IDENT LPAREN  RPAREN LCURL   RCURL
-
-
 ;
-Deklaration ::= VAR IDENT COLON IDENT SEMMIC
+
+Deklaration ::= |VAR IDENT COLON IDENT SEMIC Deklaration;
 Paralist::=Para COMMA Paralist |
 Para;
 
 Para::= IDENT COLON Typ|
 REF IDENT COLON Typ;
 
-Deklaration::=;
-StmtList::=;
+StmtList::=| Stmt SEMIC StmtList;
+
+Stmt::=SEMIC|LeftHandSide ASGN RightHandSide|
+IF LPAREN Ausdruck RPAREN Stmt|
+IF LPAREN Ausdruck RPAREN Stmt ELSE Ausdruck
+WHILE LPAREN Ausdruck RPAREN Stmt;
+
+LeftHandSide::=Typ|;
+
+RightHandSide::=Expressions;
+
+Ausdruck::=
+IDENT MatchSign IDENT|
+INTLIT MatchSign INTLIT|
+IDENT MatchSign INTLIT|
+INTLIT MatchSign IDENT;
+
+MatchSign::=
+LT|
+LE|
+GE|
+GT|
+NE|
+EQ
+;
+
+Espressions::=
+IDENT|
+IDENT Operator INTLIT|
+IDENT Operator IDENT|
+INTLIT Operator INTLIT
+;
+
+Operator::=
+PLUS|
+MINUS|
+STAR|
+SLASH
+;
