@@ -25,45 +25,46 @@ parser code {:
 terminal		ARRAY, ELSE, IF, OF, PROC, REF, TYPE, VAR, WHILE,
 				LE, GE, ASGN, LPAREN, RPAREN, LBRACK, RBRACK, LCURL,
 				RCURL, EQ, NE, LT, GT, COLON, COMMA, SEMIC, PLUS, MINUS,
-				STAR, SLASH, IDENT, INTLIT; 
+				STAR, SLASH; 
+terminal Integer INTLIT;
+terminal String IDENT;
 
-non terminal		program,;
+non terminal		program, Prozedur, Deklaration, TYP, Ausdruck, main, Variable, Anweisung;
 
 start with program;
 
 
-program			::= 
-				Prozedur program;
+program::= 
+				Prozedur program
 				|
 				TYP program;
-				;
 				
 				
-Prozedur 		::= main;
+Prozedur::= 	main
 				|
-				PROC IDENT LPAREN IDENT RPAREN LCURL Deklaration IDENT RCURL;
+				PROC IDENT LPAREN IDENT RPAREN LCURL Deklaration IDENT RCURL
 				|
-				IDENT COLON IDENT;
+				IDENT COLON IDENT
 				|
 				REF IDENT COLON IDENT;
 
-Deklaration		VAR IDENT COLON IDENT;
+Deklaration::=		VAR IDENT COLON IDENT;
 				
-TYP				::=
-				TYPE IDENT EQ IDENT;
+TYP::=
+				TYPE IDENT EQ IDENT
 				|
-				TYPE IDENT EQ ARRAY LBRACK INTLIT RBRACK OF IDENT;
+				TYPE IDENT EQ ARRAY LBRACK INTLIT RBRACK OF IDENT SEMIC
 				|
 				TYPE IDENT EQ ARRAY LBRACK INTLIT RBRACK OF IDENT LBRACK INTLIT RBRACK OF IDENT;
 
-main			::= PROC LPAREN RPAREN LCURL RCURL;
+main::= PROC LPAREN RPAREN LCURL RCURL;
 
-Variable		::=
+Variable::=
 				IDENT
 				|
-				INLIT
-
-Ausdruck		::=
+				INTLIT;
+				
+Ausdruck::=
 				Variable Ausdruck
 				|
 				PLUS Ausdruck
@@ -90,20 +91,18 @@ Ausdruck		::=
 				|
 				RBRACK Ausdruck
 				|
-				NE Ausdruck
+				NE Ausdruck;
 								
-Anweisung		::=
-				SEMIC;
-				|
-				Ausdruck SEMIC;
+Anweisung::=
+				SEMIC
 				|
 				IF LPAREN Ausdruck RPAREN IDENT
 				|
 				IF LPAREN Ausdruck RPAREN IDENT ELSE IDENT
 				|
-				WHILE LPAREN Ausdruck RPAREN IDENT;
+				WHILE LPAREN Ausdruck RPAREN IDENT
 				|
-				IDENT LPAREN Ausdruck COMMA Ausdruck RPAREN;
-
-BibProzedur		::=
+				IDENT LPAREN Ausdruck COMMA Ausdruck RPAREN
+				|
+				Variable ASGN Ausdruck;
 				
