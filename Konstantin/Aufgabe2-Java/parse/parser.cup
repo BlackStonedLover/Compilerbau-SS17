@@ -1,0 +1,68 @@
+/*
+ * parser.cup -- SPL parser specification
+ */
+
+
+package parse;
+
+import java_cup.runtime.*;
+
+
+parser code {:
+
+  public void syntax_error(Symbol currToken) {
+    System.out.println(
+      "**** Error: syntax error" +
+      " in line " + currToken.left +
+      ", column " + currToken.right
+    );
+    System.exit(0);
+  }
+
+:}
+
+
+terminal		ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,ASGN,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COMMA,COLON,IDENT,INTLIT;
+
+non terminal		Program,TypV,Prozedur;
+
+start with program;
+
+
+Program::=|
+      TypV Program
+      |
+      Prozedur Program
+      ;
+
+TypV::=
+TYPE IDENT EQ Typ SEMIC
+;
+
+Typ::=
+IDENT
+|
+Array
+;
+
+Array::=ARRAY LBRACK INLIT RBRACK OF Array |
+ARRAY LBRACK INLIT RBRACK OF IDENT
+;
+
+Prozedur::=
+PROC IDENT LPAREN Paralist RPAREN LCURL Deklaration StmtList RCURL|
+PROC IDENT LPAREN Deklaration RPAREN LCURL Deklaration StmtList RCURL|
+PROC IDENT LPAREN  RPAREN LCURL Deklaration StmtList RCURL|
+PROC IDENT LPAREN  RPAREN LCURL   RCURL
+
+
+;
+Deklaration ::= VAR IDENT COLON IDENT SEMMIC
+Paralist::=Para COMMA Paralist |
+Para;
+
+Para::= IDENT COLON Typ|
+REF IDENT COLON Typ;
+
+Deklaration::=;
+StmtList::=;
