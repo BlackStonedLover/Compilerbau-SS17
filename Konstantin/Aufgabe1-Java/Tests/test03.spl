@@ -1,0 +1,16 @@
+//
+// test03.spl -- Aufgabe 1d
+//
+
+
+
+  proc main(){
+
+  }
+
+  proc facRe(ref a:int){
+    if(a >1) facRe
+
+
+
+  }

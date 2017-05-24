@@ -1,0 +1,19 @@
+//
+// test00.spl -- Aufgabe 1a
+//
+
+proc main(){
+
+var i: int;
+var z: in;
+var s: int;
+
+readi(ref i: int);
+readi(ref z: int);
+
+
+s := i + z;
+
+printi(s: int);
+
+}

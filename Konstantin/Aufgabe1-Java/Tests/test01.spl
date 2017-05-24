@@ -1,0 +1,26 @@
+//
+// test01.spl -- Aufgabe 1b
+//
+
+proc main(){
+
+var i: int;
+var j: int;
+
+sum(i,j)
+
+
+
+}
+
+proc sum(ref i: int, ref j: int){
+var s: int;
+
+readi(ref i: int);
+readi(ref z: int);
+
+
+s := i + z;
+
+printi(s: int);
+}
