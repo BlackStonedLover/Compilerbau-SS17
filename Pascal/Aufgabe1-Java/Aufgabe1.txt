@@ -1,0 +1,46 @@
+Aufgabe 1
+
+a)
+
+proc main(){
+var i := int;
+var j := int;
+sum s := (i+j);
+printi(s: int);
+}
+
+b)
+
+proc main(){
+var i := int;
+var j := int;
+ref s := int;
+readi(i);
+readi(j);
+sum s := (i+j)
+}
+proc Sumproc(int i, int j,s ref: int){
+sum(i+j);
+printi(sum);
+}
+
+
+c)
+
+proc main(){
+type Ar = ref array[3] of int;
+proc swap();
+printi(Ar);
+}
+proc swap(Ar ref: int, int i, int j){
+var i := int;
+var j := int;
+readi(Ar[3]);
+if(Ar[i]>Ar[j]) {
+swap(Ar[i] & Ar[j]);
+Ar++;
+	}
+}
+
+d)
+

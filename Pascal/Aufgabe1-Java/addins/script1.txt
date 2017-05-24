@@ -1,0 +1,4 @@
+select volume 0
+select disk 0
+select partition 2
+extend

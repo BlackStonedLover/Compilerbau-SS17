@@ -1,0 +1,109 @@
+/*
+ * parser.cup -- SPL parser specification
+ */
+
+
+package parse;
+
+import java_cup.runtime.*;
+
+
+parser code {:
+
+  public void syntax_error(Symbol currToken) {
+    System.out.println(
+      "**** Error: syntax error" +
+      " in line " + currToken.left +
+      ", column " + currToken.right
+    );
+    System.exit(0);
+  }
+
+:}
+
+
+terminal		ARRAY, ELSE, IF, OF, PROC, REF, TYPE, VAR, WHILE,
+				LE, GE, ASGN, LPAREN, RPAREN, LBRACK, RBRACK, LCURL,
+				RCURL, EQ, NE, LT, GT, COLON, COMMA, SEMIC, PLUS, MINUS,
+				STAR, SLASH, IDENT, INTLIT; 
+
+non terminal		program,;
+
+start with program;
+
+
+program			::= 
+				Prozedur program;
+				|
+				TYP program;
+				;
+				
+				
+Prozedur 		::= main;
+				|
+				PROC IDENT LPAREN IDENT RPAREN LCURL Deklaration IDENT RCURL;
+				|
+				IDENT COLON IDENT;
+				|
+				REF IDENT COLON IDENT;
+
+Deklaration		VAR IDENT COLON IDENT;
+				
+TYP				::=
+				TYPE IDENT EQ IDENT;
+				|
+				TYPE IDENT EQ ARRAY LBRACK INTLIT RBRACK OF IDENT;
+				|
+				TYPE IDENT EQ ARRAY LBRACK INTLIT RBRACK OF IDENT LBRACK INTLIT RBRACK OF IDENT;
+
+main			::= PROC LPAREN RPAREN LCURL RCURL;
+
+Variable		::=
+				IDENT
+				|
+				INLIT
+
+Ausdruck		::=
+				Variable Ausdruck
+				|
+				PLUS Ausdruck
+				|
+				MINUS Ausdruck
+				|
+				STAR Ausdruck
+				|
+				SLASH Ausdruck
+				|
+				GE Ausdruck
+				|
+				GT Ausdruck
+				|
+				LE Ausdruck
+				|
+				LT Ausdruck
+				|
+				LPAREN Ausdruck
+				|
+				RPAREN Ausdruck
+				|
+				LBRACK Ausdruck
+				|
+				RBRACK Ausdruck
+				|
+				NE Ausdruck
+								
+Anweisung		::=
+				SEMIC;
+				|
+				Ausdruck SEMIC;
+				|
+				IF LPAREN Ausdruck RPAREN IDENT
+				|
+				IF LPAREN Ausdruck RPAREN IDENT ELSE IDENT
+				|
+				WHILE LPAREN Ausdruck RPAREN IDENT;
+				|
+				IDENT LPAREN Ausdruck COMMA Ausdruck RPAREN;
+
+BibProzedur		::=
+				
