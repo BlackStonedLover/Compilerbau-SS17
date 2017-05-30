@@ -176,20 +176,40 @@ RightHandSide::=Expressions
 
 
 Expressions::=
-Expressions LT Expressions|
-Expressions LE Expressions|
-Expressions GE Expressions|
-Expressions GT Expressions|
-Expressions NE Expressions|
-Expressions EQ Expressions|
-Expressions MINUS Expressions|
-Expressions PLUS Expressions|
+Expressions:expOne LT:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne LE:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne GE:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne GT:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne NE:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne EQ:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne MINUS:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne PLUS:OP Expressions:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
 ExpressionsOne
 ;
 
 ExpressionsOne::=
-Expressions STAR ExpressionTwo|
-Expressions SLASH ExpressionTwo|
+Expressions:expOne STAR:OP ExpressionTwo:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
+Expressions:expOne SLASH:OP ExpressionTwo:expTwo
+{:RESULT = new OpExp(expOneLeftSide,expOneRightSide,OP,expOne,expTwo);:}
+|
 ExpressionTwo
 ;
 
