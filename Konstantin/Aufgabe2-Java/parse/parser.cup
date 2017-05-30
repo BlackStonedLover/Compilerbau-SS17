@@ -119,6 +119,9 @@ AssignStmt: a
 ProcCall: pc
 {: RESULT = pc; :}
 |
+CompoundStmt:
+c
+{:RESULT = c:}
 SEMIC:
 :s
 {: RESULT = new EmptyStm (s.left,s.right) ; :}
@@ -132,7 +135,7 @@ OptElse::=
 {: RESULT = new EmptyStm(left,right) ;:}
 |
 ELSE:t Stmt:s1
-{: RESULT = new IfStmt (t.left,t.right,(Exp)t,(Stm)s1,(Stm)s1 ;:}
+{: RESULT = new IfStmt (t.left,t.right,(Exp)t,(Stm)s1,null;:}
 ;
 
 
@@ -145,9 +148,19 @@ AssignStmt::=
   {: RESULT = new AssignStmt(l.left,r.right, (Var)v, (Exp)e) ;:}
   ;
 
+<<<<<<< HEAD
+=======
+CompareStmt::=
+
+;
+
+/*
+ExpList fehlt?
+*/
+>>>>>>> 03230f1c3ffac4d06743a0de4b08fde8941c87e1
 ProcCall::=
-IDENT:i LPAREN IDENT:n RPAREN SEMIC
-{: RESULT = new CallStm(i.left,i.right,(Sym)n ;:}
+IDENT:i LPAREN Paralist:n RPAREN SEMIC
+{: RESULT = new CallStm(i.left,i.right,(Sym)i, (ExpList)n ;:}
 ;
 
 LeftHandSide::
