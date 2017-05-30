@@ -33,17 +33,17 @@ start with Program;
 
 
 Program::=|
-      TypV Program
-	  {: RESULT = new DecList((dec h)h, (DecList t)dt) ;:}
+      TypV:t Program:h
+	  {: RESULT = new DecList((dec)h, (DecList)t) ;:}
       |
-      Prozedur Program
-	  {: RESULT = new DecList((Dec h)h, (DecList t)dt) ;:}
+      Prozedur:t Program:h
+	  {: RESULT = new DecList((Dec)h, (DecList)t) ;:}
       ;
 
 /*
 eventueller Auruf von .newSym() nötig anstatt Sym sn
 */
-TypV::=TYPE IDENT:sn EQ Typ:tt SEMIC
+TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
 {: RESULT = new TypeDec(tleft,tright,(Sym) sn, (Ty)tt ;:}
 ;
 
@@ -57,7 +57,7 @@ Array: a
 
 
 Array::=
-ARRAY:a LBRACK INTLIT:count RBRACK OF Array 
+ARRAY:a LBRACK INTLIT:count RBRACK OF Array:t
 {: RESULT = new ArrayTy(aleft, aright, count, (Ty t)t) ;:}
 |
 ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
@@ -99,7 +99,7 @@ TODO: Stmtlist evtl mit boolean? da überprüfung auf empty
 StmtList::=
 {: RESULT = new StmList() ;:}
 |
-Stmt StmtList
+Stmt:h StmtList:t
 {: RESULT = new StmList((Stm h)h, (StmList t)t) ;:};
 
 
@@ -124,7 +124,7 @@ SEMIC:s
 ;
 
 IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse
-{: RESULT = new IfStmt() ;:};
+{: RESULT = ;:};
 
 OptElse::=
 {: RESULT ;:}
@@ -135,7 +135,7 @@ ELSE Stmt
 
 WhileStmt::= 
 WHILE LPAREN Ausdruck RPAREN Stmt 
-{: RESULT = ;};
+{: RESULT  ;};
 
 AssignStmt::=
   LeftHandSide:l ASGN RightHandSide:r
