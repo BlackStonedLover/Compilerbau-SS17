@@ -59,7 +59,7 @@ Array: a
 Array::=
 
 ARRAY:a LBRACK INTLIT:count RBRACK OF Array:t
-{: RESULT = new ArrayTy(aleft, aright, count, (Ty t)t) ;:}
+{: RESULT = new ArrayTy(aleft, aright, count, (Ty)t) ;:}
 |
 ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
 {: RESULT = new ArrayTy(aleft, aright, count, (Ty)t) ;:}
@@ -70,7 +70,7 @@ PROC:p IDENT:s LPAREN Paralist RPAREN LCURL Deklaration:p StmtList:b RCURL
 {: RESULT = new ProcDec(pleft, pright, (Sym)s, (DecList)p, (StmList)b) ;:};
 
 /*
-
+Abs. Klasse
 */
 Deklaration ::=
 {: RESULT =  ;:}
