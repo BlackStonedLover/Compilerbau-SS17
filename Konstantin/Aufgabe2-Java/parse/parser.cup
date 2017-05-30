@@ -145,10 +145,6 @@ AssignStmt::=
   {: RESULT = new AssignStmt(l.left,r.right, (Var)v, (Exp)e) ;:}
   ;
 
-
-/*
-ExpList fehlt?
-*/
 ProcCall::=
 IDENT:i LPAREN IDENT:n RPAREN SEMIC
 {: RESULT = new CallStm(i.left,i.right,(Sym)n ;:}
