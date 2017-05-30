@@ -65,14 +65,33 @@ REF IDENT COLON Typ;
 StmtList::=| Stmt StmtList;
 
 
-Stmt::=IfStmt|WhileStmt|AssignStmt|ProcCall|SEMIC;
+Stmt::=IfStmt:i
+{: RESULT = i; :} 
+|
+WhileStmt: w
+{: RESULT = w; :}
+|
+AssignStmt: a
+{: RESULT = a; :}
+|
+ProcCall: pc
+{: RESULT = pc; :}
+|
+/*
+TODO: EMPTY STATEMENT
+*/
+SEMIC: 
+{: RESULT = ; :}
+;
 
-IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse;
+IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse
+{: RESULT = new IfStmt() ;:};
 
 OptElse::=|ELSE Stmt;
 
 WhileStmt::= 
-WHILE LPAREN Ausdruck RPAREN Stmt {;
+WHILE LPAREN Ausdruck RPAREN Stmt 
+{: RESULT = ;};
 
 AssignStmt::=
   LeftHandSide ASGN RightHandSide;
