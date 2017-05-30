@@ -175,38 +175,26 @@ RightHandSide::=Expressions
 ;
 
 
-
-ExpList::=
-|
-Val Expressions Val ExpExtend|
-LPAREN Val Expressions RPAREN ExpExtend|
-;
-
-ExpExtend::=
-|
-Expressions|
-Operator LPAREN Val Expressions RPAREN ExpExtend|
-;
-
 Expressions::=
-LT Val|
-LE Val|
-GE Val|
-GT Val|
-NE Val|
-EQ Val|
-MINUS Val|
-PLUS Val|
-STAR Val|
-SLASH Val
+ExpressionsLT Expressions|
+Expressions LE Expressions|
+Expressions GE Expressions|
+Expressions GT Expressions|
+Expressions NE Expressions|
+Expressions EQ Expressions|
+Expressions MINUS Expressions|
+Expressions PLUS Expressions|
+Expressions STAR Expressions|
+Expressions SLASH Expressions|
+LBRACK Expressions RBRACK|
+MINUS INTLIT|
+INTLIT|
+Variable|
+VariableArray
 ;
 
 
-Val::=
-INTLIT |
-Variable |
-MINUS INTLIT
-;
+
 
 
 Operator::=
