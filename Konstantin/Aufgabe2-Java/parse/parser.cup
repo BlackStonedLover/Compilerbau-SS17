@@ -146,8 +146,9 @@ AssignStmt::=
   ;
 
 
-CompareStmt::=
-
+CompoundStmt::=
+LCURL:i StmtList:s RCURL
+{:RESULT = new CompStm(i.left,i.right,(StmList)s):}
 ;
 
 ProcCall::=
