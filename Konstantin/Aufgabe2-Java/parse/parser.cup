@@ -103,7 +103,7 @@ StmtList::=
 {: RESULT = new StmList() ;:}
 |
 Stmt:h StmtList:t
-{: RESULT = new StmList((Stm h)h, (StmList t)t) ;:};
+{: RESULT = new StmList((Stm h)h, (StmList t)t, false) ;:};
 
 
 Stmt::=
@@ -174,8 +174,8 @@ IDENT:arrIdent LBRACK Expressions:arrID RBRACK
 {: RESULT = new ArrayVar(arrIdent.left,arrIdent.right, arrIdent, arrID) ;:}
 ;
 
-RightHandSide::=Expressions
-{: RESULT ;:}
+RightHandSide::=Expressions:exp
+{: RESULT = exp ;:}
 ;
 
 
@@ -236,12 +236,11 @@ LPAREN Expressions RPAREN
 
 
 Operator::=
-LT
-LE
-GE
-GT
-EQ
-EQ
+LT |
+LE |
+GE |
+GT |
+EQ |
 PLUS|
 MINUS|
 STAR|
