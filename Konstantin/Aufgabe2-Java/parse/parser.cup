@@ -184,9 +184,16 @@ Expressions NE Expressions|
 Expressions EQ Expressions|
 Expressions MINUS Expressions|
 Expressions PLUS Expressions|
-Expressions STAR Expressions|
-Expressions SLASH Expressions|
-LBRACK Expressions RBRACK|
+ExpressionsOne
+;
+
+ExpressionsOne::=
+Expressions STAR ExpressionTwo|
+Expressions SLASH ExpressionTwo|
+ExpressionTwo
+;
+
+ExpressionTwo::=
 MINUS INTLIT|
 INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, expIntvalue) ;:}
@@ -194,8 +201,11 @@ INTLIT:expInt
 Variable:ExpVar
 {: RESULT= new VarExp(ExpVarleft,ExpVarright, (Var))expVar) ;:}
 |
-VariableArray
+VariableArray|
+LPAREN Expressions RPAREN
 ;
+
+
 
 
 
