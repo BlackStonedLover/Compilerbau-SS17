@@ -27,7 +27,7 @@ terminal Integer INTLIT;
 terminal String IDENT;
 
 
-non terminal		MatchSign,Operator,Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions,Ausdruck, IfStmt,WhileStmt,AssignStmt,ProcCall,OptElse,Variable,VariableArray;
+non terminal		MatchSign,Operator,Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions,Ausdruck, IfStmt,WhileStmt,AssignStmt,ProcCall,OptElse,Variable,VariableArray,Expressions;
 
 start with Program;
 
@@ -136,7 +136,7 @@ ELSE Stmt
 
 
 WhileStmt::=
-WHILE LPAREN Ausdruck RPAREN Stmt
+WHILE LPAREN Expressions RPAREN Stmt
 {: RESULT = ;};
 
 
@@ -163,10 +163,10 @@ VariableArray
 {: RESULT ;:}
 ;
 
-VariableArray::= VariableArray LBRACK Ausdruck RBRACK
+VariableArray::= VariableArray LBRACK Expressions RBRACK
 {: RESULT ;:}
 |
-IDENT LBRACK Ausdruck RBRACK
+IDENT LBRACK Expressions RBRACK
 {: RESULT ;:}
 ;
 
