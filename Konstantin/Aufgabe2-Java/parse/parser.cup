@@ -80,20 +80,23 @@ VAR IDENT COLON IDENT SEMIC Deklaration:abs
 
 
 Paralist::=
-{: RESULT ;:}
+:s
+{: RESULT = new EmptyStm (s.left,s.right) ; :}
 |
-Para COMMA Paralist
-{: RESULT ;:}
+Para:s COMMA Paralist
+{: RESULT = s ;:}
 |
-Para
-{: RESULT ;:};
+Para:s
+{: RESULT = s ;:};
 
 
-Para::= IDENT COLON Typ
-{: RESULT ;:}
+Para::=
+IDENT:idt COLON Typ:tipe
+{: RESULT = new ParDec(idt.left,idt.right,idt,tipe,false);:}
 |
-REF IDENT COLON Typ
-{: RESULT ;:};
+REF IDENT:idt COLON Typ:tipe
+{: RESULT = new ParDec(idt.left,idt.right,idt,tipe,true);:}
+;
 
 
 /*
@@ -119,7 +122,8 @@ AssignStmt: a
 ProcCall: pc
 {: RESULT = pc; :}
 |
-SEMIC:s
+SEMIC:
+:s
 {: RESULT = new EmptyStm (s.left,s.right) ; :}
 ;
 
@@ -144,7 +148,7 @@ AssignStmt::=
   {: RESULT = new AssignStmt(l.left,r.right, (Var)v, (Exp)e) ;:}
   ;
 
-  
+
 /*
 ExpList fehlt?
 */
@@ -153,7 +157,7 @@ IDENT:i LPAREN IDENT:n RPAREN SEMIC
 {: RESULT = new CallStm(i.left,i.right,(Sym)n ;:}
 ;
 
-LeftHandSide::=
+LeftHandSide::
 {: RESULT = new EmptyStm(left,right);:}
 |
 Variable:v
