@@ -188,8 +188,12 @@ Expressions STAR Expressions|
 Expressions SLASH Expressions|
 LBRACK Expressions RBRACK|
 MINUS INTLIT|
-INTLIT|
-Variable|
+INTLIT:expInt
+{: RESULT= new IntExp(expIntleft,expIntright, expIntvalue) ;:}
+|
+Variable:ExpVar
+{: RESULT= new VarExp(ExpVarleft,ExpVarright, (Var))expVar) ;:}
+|
 VariableArray
 ;
 
