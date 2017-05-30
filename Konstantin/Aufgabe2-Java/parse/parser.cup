@@ -57,7 +57,7 @@ Array: a
 
 
 Array::=
-ARRAY:a LBRACK INTLIT:count RBRACK OF Array 
+ARRAY:a LBRACK INTLIT:count RBRACK OF Array
 {: RESULT = new ArrayTy(aleft, aright, count, (Ty t)t) ;:}
 |
 ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
@@ -71,7 +71,7 @@ PROC:p IDENT:s LPAREN Paralist RPAREN LCURL Deklaration:p StmtList:b RCURL
 /*
 
 */
-Deklaration ::= 
+Deklaration ::=
 {: RESULT =  ;:}
 |
 VAR IDENT COLON IDENT SEMIC Deklaration
@@ -80,7 +80,7 @@ VAR IDENT COLON IDENT SEMIC Deklaration
 Paralist::=
 {: RESULT ;:}
 |
-Para COMMA Paralist 
+Para COMMA Paralist
 {: RESULT ;:}
 |
 Para
@@ -105,7 +105,7 @@ Stmt StmtList
 
 Stmt::=
 IfStmt:i
-{: RESULT = i; :} 
+{: RESULT = i; :}
 |
 WhileStmt: w
 {: RESULT = w; :}
@@ -119,7 +119,7 @@ ProcCall: pc
 /*
 TODO: EMPTY STATEMENT
 */
-SEMIC:s 
+SEMIC:s
 {: RESULT = (sleft,sright) ; :}
 ;
 
@@ -137,8 +137,8 @@ ELSE Stmt
 WhileStmt::=
 WHILE LPAREN Ausdruck RPAREN Stmt {;
 =======
-WhileStmt::= 
-WHILE LPAREN Ausdruck RPAREN Stmt 
+WhileStmt::=
+WHILE LPAREN Ausdruck RPAREN Stmt
 {: RESULT = ;};
 >>>>>>> 45b1336baa0046ff0f116f17df55e4b9cb50b9f2
 
@@ -161,14 +161,14 @@ Variable
 Variable::=IDENT
 {: RESULT ;:}
 |
-VariableArray 
+VariableArray
 {: RESULT ;:}
 ;
 
 VariableArray::= VariableArray LBRACK Ausdruck RBRACK
 {: RESULT ;:}
 |
-IDENT LBRACK Ausdruck RBRACK 
+IDENT LBRACK Ausdruck RBRACK
 {: RESULT ;:}
 ;
 
@@ -196,7 +196,7 @@ EQ;
 ExpList::=
 |
 Val Expressions ExpList|
-LPAREN Expressions RPAREN ExpList|
+LPAREN Val Expressions RPAREN ExpList|
 ;
 
 Expressions::=
@@ -218,6 +218,7 @@ INTLIT |
 Variable |
 MINUS INTLIT
 ;
+
 Expressions::=
 Variable:v {: RESULT = new VarExp(vleft,vright,v); :}|
 Variable Operator INTLIT|
