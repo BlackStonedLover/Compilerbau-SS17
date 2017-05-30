@@ -164,10 +164,10 @@ VariableArray
 ;
 
 VariableArray::= VariableArray LBRACK Expressions RBRACK
-{: RESULT ;:}
+{: RESULT = );:}
 |
-IDENT LBRACK Expressions RBRACK
-{: RESULT ;:}
+IDENT:arrIdent LBRACK Expressions:arrID RBRACK
+{: RESULT = new ArrayVar(arrIdentLeftSide,arrIdentRightSide, arrIdent, arrID) ;:}
 ;
 
 RightHandSide::=Expressions
