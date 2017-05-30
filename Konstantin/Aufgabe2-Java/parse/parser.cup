@@ -44,7 +44,7 @@ Program::=|
 eventueller Auruf von .newSym() nötig anstatt Sym sn
 */
 TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
-{: RESULT = new TypeDec(tleft,tright,(Sym) sn, (Ty)tt ;:}
+{: RESULT = new TypeDec(t.left,t.right,(Sym) sn, (Ty)tt ;:}
 ;
 
 Typ::=
@@ -59,15 +59,15 @@ Array: a
 Array::=
 
 ARRAY:a LBRACK INTLIT:count RBRACK OF Array:t
-{: RESULT = new ArrayTy(aleft, aright, count, (Ty)t) ;:}
+{: RESULT = new ArrayTy(a.left, a.right, count, (Ty)t) ;:}
 |
 ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
-{: RESULT = new ArrayTy(aleft, aright, count, (Ty)t) ;:}
+{: RESULT = new ArrayTy(a.left, a.right, count, (Ty)t) ;:}
 ;
 
 Prozedur::=
 PROC:p IDENT:s LPAREN Paralist RPAREN LCURL Deklaration:p StmtList:b RCURL
-{: RESULT = new ProcDec(pleft, pright, (Sym)s, (DecList)p, (StmList)b) ;:};
+{: RESULT = new ProcDec(p.left, p.right, (Sym)s, (DecList)p, (StmList)b) ;:};
 
 /*
 Abs. Klasse
@@ -127,7 +127,7 @@ SEMIC:s
 ;
 
 IfStmt::=IF:i LPAREN Expressions:t RPAREN Stmt:s1 OptElse:s2
-{: RESULT = (ileft,iright,(Exp)t,(Stm)s1,(Stm)s2 ;:};
+{: RESULT = new IfStmt (i.left,i.right,(Exp)t,(Stm)s1,(Stm)s2 ;:};
 
 /*
 Empty Stmt
@@ -141,18 +141,21 @@ ELSE Stmt
 
 
 WhileStmt::=
-WHILE LPAREN Expressions RPAREN Stmt
-{: RESULT = ;};
-
+WHILE:w LPAREN Expressions:t RPAREN Stmt:b
+{: RESULT = new WhileStmt (w.left,w.right,(Exp)t,(Stm)b ;};
 
 AssignStmt::=
   LeftHandSide:l ASGN RightHandSide:r
-  {: RESULT = new AssignStmt(lleft,rright, (Var)v, (Exp)e) ;:}
+  {: RESULT = new AssignStmt(l.left,r.right, (Var)v, (Exp)e) ;:}
   ;
 
+  
+/*
+ExpList fehlt?
+*/
 ProcCall::=
-IDENT LPAREN IDENT RPAREN SEMIC
-{: RESULT ;:}
+IDENT:i LPAREN IDENT:n RPAREN SEMIC
+{: RESULT = new CallStm(i.left,i.right,(Sym)n ;:}
 ;
 
 LeftHandSide::=
@@ -221,10 +224,10 @@ ExpressionTwo
 ExpressionTwo::=
 MINUS INTLIT|
 INTLIT:expInt
-{: RESULT= new IntExp(expIntleft,expIntright, expIntvalue) ;:}
+{: RESULT= new IntExp(expInt.left,expInt.right, expIntvalue) ;:}
 |
 Variable:ExpVar
-{: RESULT= new VarExp(ExpVarleft,ExpVarright, (Var))expVar) ;:}
+{: RESULT= new VarExp(ExpVar.left,ExpVar.right, (Var))expVar) ;:}
 |
 VariableArray|
 LPAREN Expressions RPAREN
