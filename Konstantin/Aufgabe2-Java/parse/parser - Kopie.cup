@@ -71,7 +71,7 @@ IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse;
 
 OptElse::=|ELSE Stmt;
 
-WhileStmt::=
+WhileStmt::= 
 WHILE LPAREN Ausdruck RPAREN Stmt {;
 
 AssignStmt::=
@@ -103,33 +103,8 @@ GT|
 NE|
 EQ;
 
-ExpList::=
-|
-Val Expressions ExpList|
-LPAREN Expressions RPAREN ExpList|
-;
-
-Expressions::=
-LT Val|
-LE Val|
-GE Val|
-GT Val|
-NE Val|
-EQ Val|
-MINUS Val|
-PLUS Val|
-STAR Val|
-SLASH Val
-;
-
-
-Val::=
-INTLIT |
-Variable |
-MINUS INTLIT
-;
-Expressions::=
-Variable:v {: RESULT = new VarExp(vleft,vright,v); :}|
+Expressions::= 
+Variable:v {: RESULT = new VarExp(vleft,vright,v); :}| 
 Variable Operator INTLIT|
 Variable Operator Variable|
 INTLIT Operator INTLIT|
