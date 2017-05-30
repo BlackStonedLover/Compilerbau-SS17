@@ -148,8 +148,7 @@ AssignStmt::=
   {: RESULT = new AssignStmt(l.left,r.right, (Var)v, (Exp)e) ;:}
   ;
 
-<<<<<<< HEAD
-=======
+
 CompareStmt::=
 
 ;
@@ -157,7 +156,7 @@ CompareStmt::=
 /*
 ExpList fehlt?
 */
->>>>>>> 03230f1c3ffac4d06743a0de4b08fde8941c87e1
+
 ProcCall::=
 IDENT:i LPAREN Paralist:n RPAREN SEMIC
 {: RESULT = new CallStm(i.left,i.right,(Sym)i, (ExpList)n ;:}
