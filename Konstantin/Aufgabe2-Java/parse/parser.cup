@@ -71,8 +71,8 @@ IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse;
 
 OptElse::=|ELSE Stmt;
 
-WhileStmt::=
-WHILE LPAREN Ausdruck RPAREN Stmt;
+WhileStmt::= 
+WHILE LPAREN Ausdruck RPAREN Stmt {;
 
 AssignStmt::=
   LeftHandSide ASGN RightHandSide;
@@ -86,7 +86,9 @@ Variable::=IDENT| VariableArray ;
 VariableArray::= VariableArray LBRACK Ausdruck RBRACK|IDENT LBRACK Ausdruck RBRACK ;
 
 RightHandSide::=Expressions;
-
+/*
+TODO: Ausdrücke ersetzen
+*/
 Ausdruck::=
 Variable MatchSign Variable|
 INTLIT MatchSign INTLIT|
@@ -101,11 +103,18 @@ GT|
 NE|
 EQ;
 
-Expressions::=
-Variable|
+Expressions::= 
+Variable:v {: RESULT = new VarExp(vleft,vright,v); :}| 
 Variable Operator INTLIT|
 Variable Operator Variable|
-INTLIT Operator INTLIT;
+INTLIT Operator INTLIT|
+Expressions LT Expressions|
+Expressions LE Expressions|
+Expressions GE Expressions|
+Expressions GT Expressions|
+Expressions NE Expressions|
+Expressions EQ Expressions;
+
 
 Operator::=
 PLUS|
