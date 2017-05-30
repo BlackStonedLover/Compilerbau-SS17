@@ -57,11 +57,8 @@ Array: a
 
 
 Array::=
-<<<<<<< HEAD
-ARRAY:a LBRACK INTLIT:count RBRACK OF Array
-=======
+
 ARRAY:a LBRACK INTLIT:count RBRACK OF Array:t
->>>>>>> 90047f3c6803d7c2705df5d6958e6488b0616c0c
 {: RESULT = new ArrayTy(aleft, aright, count, (Ty t)t) ;:}
 |
 ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
@@ -137,23 +134,11 @@ ELSE Stmt
 {: RESULT ;:}
 ;
 
-<<<<<<< HEAD
-WhileStmt::=
-WHILE LPAREN Ausdruck RPAREN Stmt {;
-=======
-<<<<<<< HEAD
+
 WhileStmt::=
 WHILE LPAREN Ausdruck RPAREN Stmt
-=======
-WhileStmt::= 
-WHILE LPAREN Ausdruck RPAREN Stmt 
-<<<<<<< HEAD
-{: RESULT  ;};
-=======
->>>>>>> 90047f3c6803d7c2705df5d6958e6488b0616c0c
 {: RESULT = ;};
->>>>>>> 45b1336baa0046ff0f116f17df55e4b9cb50b9f2
->>>>>>> 941da97ee3b2bd08edb6d6161d01ce9dfb49f6ca
+
 
 AssignStmt::=
   LeftHandSide:l ASGN RightHandSide:r
