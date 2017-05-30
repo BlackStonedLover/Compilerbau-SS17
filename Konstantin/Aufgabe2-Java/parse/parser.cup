@@ -174,27 +174,18 @@ RightHandSide::=Expressions
 {: RESULT ;:}
 ;
 
-/*
-TODO: Ausdrücke ersetzen
-*/
-Ausdruck::=
-Variable MatchSign Variable|
-INTLIT MatchSign INTLIT|
-Variable MatchSign INTLIT|
-INTLIT MatchSign Variable;
 
-MatchSign::=
-LT|
-LE|
-GE|
-GT|
-NE|
-EQ;
 
 ExpList::=
 |
-Val Expressions ExpList|
-LPAREN Val Expressions RPAREN ExpList|
+Val Expressions Val ExpExtend|
+LPAREN Val Expressions RPAREN ExpExtend|
+;
+
+ExpExtend::=
+|
+Expressions|
+Operator LPAREN Val Expressions RPAREN ExpExtend|
 ;
 
 Expressions::=
@@ -217,20 +208,14 @@ Variable |
 MINUS INTLIT
 ;
 
-Expressions::=
-Variable:v {: RESULT = new VarExp(vleft,vright,v); :}|
-Variable Operator INTLIT|
-Variable Operator Variable|
-INTLIT Operator INTLIT|
-Expressions LT Expressions|
-Expressions LE Expressions|
-Expressions GE Expressions|
-Expressions GT Expressions|
-Expressions NE Expressions|
-Expressions EQ Expressions;
-
 
 Operator::=
+LT
+LE
+GE
+GT
+EQ
+EQ
 PLUS|
 MINUS|
 STAR|
