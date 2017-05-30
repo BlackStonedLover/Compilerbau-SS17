@@ -27,7 +27,7 @@ terminal Integer INTLIT;
 terminal String IDENT;
 
 
-non terminal		MatchSign,Operator,Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions,Ausdruck, IfStmt,WhileStmt,AssignStmt,ProcCall,OptELSE;
+non terminal		MatchSign,Operator,Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions,Ausdruck, IfStmt,WhileStmt,AssignStmt,ProcCall,OptElse,Variable,VariableArray;
 
 start with Program;
 
@@ -62,32 +62,36 @@ Para;
 Para::= IDENT COLON Typ|
 REF IDENT COLON Typ;
 
-StmtList::=| Stmt SEMIC StmtList;
+StmtList::=| Stmt StmtList;
 
 
 Stmt::=IfStmt|WhileStmt|AssignStmt|ProcCall|SEMIC;
 
-IfStmt::=IF LPAREN Expressions RPAREN Stmt OptELSE;
+IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse;
 
-OptELSE::=|ELSE Stmt;
+OptElse::=|ELSE Stmt;
 
 WhileStmt::=
 WHILE LPAREN Ausdruck RPAREN Stmt;
 
 AssignStmt::=
   LeftHandSide ASGN RightHandSide;
+
 ProcCall::=
 IDENT LPAREN IDENT RPAREN SEMIC;
 
-LeftHandSide::=Typ|;
+LeftHandSide::=|Variable;
+
+Variable::=IDENT| VariableArray ;
+VariableArray::= VariableArray LBRACK Ausdruck RBRACK|IDENT LBRACK Ausdruck RBRACK ;
 
 RightHandSide::=Expressions;
 
 Ausdruck::=
-IDENT MatchSign IDENT|
+Variable MatchSign Variable|
 INTLIT MatchSign INTLIT|
-IDENT MatchSign INTLIT|
-INTLIT MatchSign IDENT;
+Variable MatchSign INTLIT|
+INTLIT MatchSign Variable;
 
 MatchSign::=
 LT|
@@ -98,9 +102,9 @@ NE|
 EQ;
 
 Expressions::=
-IDENT|
-IDENT Operator INTLIT|
-IDENT Operator IDENT|
+Variable|
+Variable Operator INTLIT|
+Variable Operator Variable|
 INTLIT Operator INTLIT;
 
 Operator::=
