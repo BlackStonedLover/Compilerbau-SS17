@@ -78,6 +78,7 @@ Deklaration ::=
 VAR IDENT COLON IDENT SEMIC Deklaration
 {: RESULT ;:};
 
+
 Paralist::=
 {: RESULT ;:}
 |
@@ -86,6 +87,7 @@ Para COMMA Paralist
 |
 Para
 {: RESULT ;:};
+
 
 Para::= IDENT COLON Typ
 {: RESULT ;:}
@@ -124,14 +126,17 @@ SEMIC:s
 {: RESULT = (sleft,sright) ; :}
 ;
 
-IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse
-{: RESULT = ;:};
+IfStmt::=IF:i LPAREN Expressions:t RPAREN Stmt:s1 OptElse:s2
+{: RESULT = (ileft,iright,(Exp)t,(Stm)s1,(Stm)s2 ;:};
 
+/*
+Empty Stmt
+*/
 OptElse::=
 {: RESULT ;:}
 |
 ELSE Stmt
-{: RESULT ;:}
+{: RESULT =  ;:}
 ;
 
 
