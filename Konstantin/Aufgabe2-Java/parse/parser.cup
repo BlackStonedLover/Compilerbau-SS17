@@ -96,9 +96,6 @@ REF IDENT:idt COLON Typ:tipe
 ;
 
 
-/*
-TODO: Stmtlist evtl mit boolean? da überprüfung auf empty
-*/
 StmtList::=
 {: RESULT = new StmList() ;:}
 |
@@ -152,10 +149,6 @@ AssignStmt::=
 CompareStmt::=
 
 ;
-
-/*
-ExpList fehlt?
-*/
 
 ProcCall::=
 IDENT:i LPAREN Paralist:n RPAREN SEMIC
