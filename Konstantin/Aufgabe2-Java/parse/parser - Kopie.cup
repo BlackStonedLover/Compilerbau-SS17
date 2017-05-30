@@ -1,0 +1,123 @@
+/*
+ * parser.cup -- SPL parser specification
+ */
+
+
+package parse;
+
+import java_cup.runtime.*;
+
+
+parser code {:
+
+  public void syntax_error(Symbol currToken) {
+    System.out.println(
+      "**** Error: syntax error" +
+      " in line " + currToken.left +
+      ", column " + currToken.right
+    );
+    System.exit(0);
+  }
+
+:}
+
+
+terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,ASGN,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COMMA,COLON;
+terminal Integer INTLIT;
+terminal String IDENT;
+
+
+non terminal		MatchSign,Operator,Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions,Ausdruck, IfStmt,WhileStmt,AssignStmt,ProcCall,OptElse,Variable,VariableArray;
+
+start with Program;
+
+
+Program::=|
+      TypV Program
+      |
+      Prozedur Program
+      ;
+
+TypV::=TYPE IDENT EQ Typ SEMIC
+;
+
+Typ::=
+IDENT
+|
+Array
+;
+
+Array::=ARRAY LBRACK INTLIT RBRACK OF Array |
+ARRAY LBRACK INTLIT RBRACK OF IDENT
+;
+
+Prozedur::=
+PROC IDENT LPAREN Paralist RPAREN LCURL Deklaration StmtList RCURL;
+
+Deklaration ::= |VAR IDENT COLON IDENT SEMIC Deklaration;
+
+Paralist::=|Para COMMA Paralist |
+Para;
+
+Para::= IDENT COLON Typ|
+REF IDENT COLON Typ;
+
+StmtList::=| Stmt StmtList;
+
+
+Stmt::=IfStmt|WhileStmt|AssignStmt|ProcCall|SEMIC;
+
+IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse;
+
+OptElse::=|ELSE Stmt;
+
+WhileStmt::= 
+WHILE LPAREN Ausdruck RPAREN Stmt {;
+
+AssignStmt::=
+  LeftHandSide ASGN RightHandSide;
+
+ProcCall::=
+IDENT LPAREN IDENT RPAREN SEMIC;
+
+LeftHandSide::=|Variable;
+
+Variable::=IDENT| VariableArray ;
+VariableArray::= VariableArray LBRACK Ausdruck RBRACK|IDENT LBRACK Ausdruck RBRACK ;
+
+RightHandSide::=Expressions;
+/*
+TODO: Ausdrücke ersetzen
+*/
+Ausdruck::=
+Variable MatchSign Variable|
+INTLIT MatchSign INTLIT|
+Variable MatchSign INTLIT|
+INTLIT MatchSign Variable;
+
+MatchSign::=
+LT|
+LE|
+GE|
+GT|
+NE|
+EQ;
+
+Expressions::= 
+Variable:v {: RESULT = new VarExp(vleft,vright,v); :}| 
+Variable Operator INTLIT|
+Variable Operator Variable|
+INTLIT Operator INTLIT|
+Expressions LT Expressions|
+Expressions LE Expressions|
+Expressions GE Expressions|
+Expressions GT Expressions|
+Expressions NE Expressions|
+Expressions EQ Expressions;
+
+
+Operator::=
+PLUS|
+MINUS|
+STAR|
+SLASH;

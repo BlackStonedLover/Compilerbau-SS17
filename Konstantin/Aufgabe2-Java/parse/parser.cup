@@ -133,9 +133,18 @@ ELSE Stmt
 {: RESULT ;:}
 ;
 
+<<<<<<< HEAD
+WhileStmt::=
+WHILE LPAREN Ausdruck RPAREN Stmt {;
+=======
 WhileStmt::= 
 WHILE LPAREN Ausdruck RPAREN Stmt 
+<<<<<<< HEAD
 {: RESULT  ;};
+=======
+{: RESULT = ;};
+>>>>>>> 45b1336baa0046ff0f116f17df55e4b9cb50b9f2
+>>>>>>> 941da97ee3b2bd08edb6d6161d01ce9dfb49f6ca
 
 AssignStmt::=
   LeftHandSide:l ASGN RightHandSide:r
@@ -188,8 +197,33 @@ GT|
 NE|
 EQ;
 
-Expressions::= 
-Variable:v {: RESULT = new VarExp(vleft,vright,v); :}| 
+ExpList::=
+|
+Val Expressions ExpList|
+LPAREN Expressions RPAREN ExpList|
+;
+
+Expressions::=
+LT Val|
+LE Val|
+GE Val|
+GT Val|
+NE Val|
+EQ Val|
+MINUS Val|
+PLUS Val|
+STAR Val|
+SLASH Val
+;
+
+
+Val::=
+INTLIT |
+Variable |
+MINUS INTLIT
+;
+Expressions::=
+Variable:v {: RESULT = new VarExp(vleft,vright,v); :}|
 Variable Operator INTLIT|
 Variable Operator Variable|
 INTLIT Operator INTLIT|
