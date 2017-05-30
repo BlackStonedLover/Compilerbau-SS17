@@ -151,7 +151,7 @@ IDENT LPAREN IDENT RPAREN SEMIC
 ;
 
 LeftHandSide::=
-{: RESULT ;:}
+{: RESULT = new EmptyStm(left,right);:}
 |
 Variable
 {: RESULT ;:};
