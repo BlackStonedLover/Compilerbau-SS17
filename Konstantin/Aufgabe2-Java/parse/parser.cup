@@ -176,7 +176,7 @@ RightHandSide::=Expressions
 
 
 Expressions::=
-ExpressionsLT Expressions|
+Expressions LT Expressions|
 Expressions LE Expressions|
 Expressions GE Expressions|
 Expressions GT Expressions|
