@@ -34,58 +34,148 @@ start with Program;
 
 Program::=|
       TypV Program
+	  {: RESULT = new DecList((dec h)h, (DecList t)dt) ;:}
       |
       Prozedur Program
+	  {: RESULT = new DecList((Dec h)h, (DecList t)dt) ;:}
       ;
 
-TypV::=TYPE IDENT EQ Typ SEMIC
+/*
+eventueller Auruf von .newSym() nötig anstatt Sym sn
+*/
+TypV::=TYPE IDENT:sn EQ Typ:tt SEMIC
+{: RESULT = new TypeDec(tleft,tright,(Sym) sn, (Ty)tt ;:}
 ;
 
 Typ::=
-IDENT
+IDENT:id
+{: RESULT = id ;:}
 |
-Array
+Array: a
+{: RESULT = a ;:}
 ;
 
-Array::=ARRAY LBRACK INTLIT RBRACK OF Array |
-ARRAY LBRACK INTLIT RBRACK OF IDENT
+
+Array::=
+ARRAY:a LBRACK INTLIT:count RBRACK OF Array 
+{: RESULT = new ArrayTy(aleft, aright, count, (Ty t)t) ;:}
+|
+ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
+{: RESULT = new ArrayTy(aleft, aright, count, (Ty)t) ;:}
 ;
 
 Prozedur::=
-PROC IDENT LPAREN Paralist RPAREN LCURL Deklaration StmtList RCURL;
+PROC:p IDENT:s LPAREN Paralist RPAREN LCURL Deklaration:p StmtList:b RCURL
+{: RESULT = new ProcDec(pleft, pright, (Sym)s, (DecList)p, (StmList)b) ;:};
 
-Deklaration ::= |VAR IDENT COLON IDENT SEMIC Deklaration;
+/*
 
-Paralist::=|Para COMMA Paralist |
-Para;
+*/
+Deklaration ::= 
+{: RESULT =  ;:}
+|
+VAR IDENT COLON IDENT SEMIC Deklaration
+{: RESULT ;:};
 
-Para::= IDENT COLON Typ|
-REF IDENT COLON Typ;
+Paralist::=
+{: RESULT ;:}
+|
+Para COMMA Paralist 
+{: RESULT ;:}
+|
+Para
+{: RESULT ;:};
 
-StmtList::=| Stmt StmtList;
+Para::= IDENT COLON Typ
+{: RESULT ;:}
+|
+REF IDENT COLON Typ
+{: RESULT ;:};
 
 
-Stmt::=IfStmt|WhileStmt|AssignStmt|ProcCall|SEMIC;
+/*
+TODO: Stmtlist evtl mit boolean? da überprüfung auf empty
+*/
+StmtList::=
+{: RESULT = new StmList() ;:}
+|
+Stmt StmtList
+{: RESULT = new StmList((Stm h)h, (StmList t)t) ;:};
 
-IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse;
 
-OptElse::=|ELSE Stmt;
+Stmt::=
+IfStmt:i
+{: RESULT = i; :} 
+|
+WhileStmt: w
+{: RESULT = w; :}
+|
+AssignStmt: a
+{: RESULT = a; :}
+|
+ProcCall: pc
+{: RESULT = pc; :}
+|
+/*
+TODO: EMPTY STATEMENT
+*/
+SEMIC:s 
+{: RESULT = (sleft,sright) ; :}
+;
 
+IfStmt::=IF LPAREN Expressions RPAREN Stmt OptElse
+{: RESULT = new IfStmt() ;:};
+
+OptElse::=
+{: RESULT ;:}
+|
+ELSE Stmt
+{: RESULT ;:}
+;
+
+<<<<<<< HEAD
 WhileStmt::=
 WHILE LPAREN Ausdruck RPAREN Stmt {;
+=======
+WhileStmt::= 
+WHILE LPAREN Ausdruck RPAREN Stmt 
+{: RESULT = ;};
+>>>>>>> 45b1336baa0046ff0f116f17df55e4b9cb50b9f2
 
 AssignStmt::=
-  LeftHandSide ASGN RightHandSide;
+  LeftHandSide:l ASGN RightHandSide:r
+  {: RESULT = new AssignStmt(lleft,rright, (Var)v, (Exp)e) ;:}
+  ;
 
 ProcCall::=
-IDENT LPAREN IDENT RPAREN SEMIC;
+IDENT LPAREN IDENT RPAREN SEMIC
+{: RESULT ;:}
+;
 
-LeftHandSide::=|Variable;
+LeftHandSide::=
+{: RESULT ;:}
+|
+Variable
+{: RESULT ;:};
 
-Variable::=IDENT| VariableArray ;
-VariableArray::= VariableArray LBRACK Ausdruck RBRACK|IDENT LBRACK Ausdruck RBRACK ;
+Variable::=IDENT
+{: RESULT ;:}
+|
+VariableArray 
+{: RESULT ;:}
+;
 
-RightHandSide::=Expressions;
+VariableArray::= VariableArray LBRACK Ausdruck RBRACK
+{: RESULT ;:}
+|
+IDENT LBRACK Ausdruck RBRACK 
+{: RESULT ;:}
+;
+
+RightHandSide::=Expressions
+{: RESULT ;:}
+;
+
 /*
 TODO: Ausdrücke ersetzen
 */
