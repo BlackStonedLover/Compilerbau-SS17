@@ -55,17 +55,15 @@ start with Program;
 
 Program::=|
       TypV:t Program:h
-	  {: RESULT = new DecList((dec)h, (DecList)t) ;:}
+	  {: RESULT = new DecList(h,t) ;:}
       |
       Prozedur:t Program:h
-	  {: RESULT = new DecList((Dec)h, (DecList)t) ;:}
+	  {: RESULT = new DecList(h,t) ;:}
       ;
 
-/*
-eventueller Auruf von .newSym() nötig anstatt Sym sn
-*/
+
 TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
-{: RESULT = new TypeDec(t.left,t.right,(Sym) sn, (Ty)tt ;:}
+{: RESULT = new TypeDec(t.left,t.right,Sym.newSym(sn),tt ;:}
 ;
 
 Typ::=
@@ -80,15 +78,15 @@ Array: a
 Array::=
 
 ARRAY:a LBRACK INTLIT:count RBRACK OF Array:t
-{: RESULT = new ArrayTy(a.left, a.right, count, (Ty)t) ;:}
+{: RESULT = new ArrayTy(a.left, a.right, count,t) ;:}
 |
 ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
-{: RESULT = new ArrayTy(a.left, a.right, count, (Ty)t) ;:}
+{: RESULT = new ArrayTy(a.left, a.right, count,t) ;:}
 ;
 
 Prozedur::=
 PROC:p IDENT:s LPAREN Paralist RPAREN LCURL Deklaration:p StmtList:b RCURL
-{: RESULT = new ProcDec(p.left, p.right, (Sym)s, (DecList)p, (StmList)b) ;:};
+{: RESULT = new ProcDec(p.left, p.right, Sym.newSym(s),p,b) ;:};
 
 Deklaration ::=
 {: RESULT = new DecList() ;:}
@@ -124,7 +122,7 @@ StmtList::=
 {: RESULT = new StmList() ;:}
 |
 Stmt:h StmtList:t
-{: RESULT = new StmList((Stm h)h, (StmList t)t) ;:};
+{: RESULT = new StmList(h,t) ;:};
 
 
 Stmt::=
@@ -148,7 +146,7 @@ SEMIC:
 ;
 
 IfStmt::=IF:i LPAREN Expressions:t RPAREN Stmt:s1 OptElse:s2
-{: RESULT = new IfStmt (i.left,i.right,(Exp)t,(Stm)s1,(Stm)s2 ;:};
+{: RESULT = new IfStmt (i.left,i.right,t,s1,s2 ;:};
 
 
 OptElse::=
@@ -161,22 +159,22 @@ ELSE:t Stmt:s1
 
 WhileStmt::=
 WHILE:w LPAREN Expressions:t RPAREN Stmt:b
-{: RESULT = new WhileStmt (w.left,w.right,(Exp)t,(Stm)b ;};
+{: RESULT = new WhileStmt (w.left,w.right,t,b ;};
 
 AssignStmt::=
   LeftHandSide:l ASGN RightHandSide:r
-  {: RESULT = new AssignStmt(l.left,r.right, (Var)l, (Exp)r) ;:}
+  {: RESULT = new AssignStmt(l.left,r.right,l,r) ;:}
   ;
 
 
 CompoundStmt::=
 LCURL:i StmtList:s RCURL
-{:RESULT = new CompStm(i.left,i.right,(StmList)s):}
+{:RESULT = new CompStm(i.left,i.right,s):}
 ;
 
 ProcCall::=
 IDENT:i LPAREN Paralist:n RPAREN SEMIC
-{: RESULT = new CallStm(i.left,i.right,(Sym)i, (ExpList)n ;:}
+{: RESULT = new CallStm(i.left,i.right,Sym.newSym(i),n ;:}
 ;
 
 LeftHandSide::=
@@ -185,14 +183,14 @@ Variable:v
 
 Variable::=
 IDENT:id
-{: RESULT = new SimpleVar(id.left,id.right,(Sym)id ;:}
+{: RESULT = new SimpleVar(id.left,id.right,Sym.newSym(id) ;:}
 |
 VariableArray:va
 {: RESULT = va ;:}
 ;
 
 VariableArray::= VariableArray:va LBRACK Expressions:exp RBRACK
-{: RESULT = new ArrayVar(va.left,va.right,(Var)va,(Exp)exp) ;:}
+{: RESULT = new ArrayVar(va.left,va.right,va,exp) ;:}
 |
 IDENT:arrIdent LBRACK Expressions:arrID RBRACK
 {: RESULT = new ArrayVar(arrIdent.left,arrIdent.right, arrIdent, arrID) ;:}
@@ -250,7 +248,7 @@ INTLIT:expInt
 {: RESULT= new IntExp(expInt.left,expInt.right, expInt) ;:}
 |
 Variable:ExpVar
-{: RESULT= new VarExp(ExpVar.left,ExpVar.right, (Var))expVar) ;:}
+{: RESULT= new VarExp(ExpVar.left,ExpVar.right,expVar) ;:}
 |
 VariableArray:varar
 {:RESULT = varar;:}|
