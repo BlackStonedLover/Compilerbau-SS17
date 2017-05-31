@@ -69,12 +69,11 @@ Prozedur::=
 PROC:p IDENT:s LPAREN Paralist RPAREN LCURL Deklaration:p StmtList:b RCURL
 {: RESULT = new ProcDec(p.left, p.right, (Sym)s, (DecList)p, (StmList)b) ;:};
 
-Deklaration ::= :abs
-{: RESULT = abs; ;:}
+Deklaration ::=
+{: RESULT = new DecList() ;:}
 |
-VAR IDENT COLON IDENT SEMIC Deklaration:abs
-{: RESULT = abs; ;:};
-
+VAR IDENT:n COLON Typ:t SEMIC Deklaration:d
+{: RESULT = new DecList(new VarDec(n.left,n.right,Sym.newSym(n),t),d) ;:};
 
 Paralist::=
 {: RESULT = new DecList() ; :}
