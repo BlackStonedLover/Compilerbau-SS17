@@ -255,5 +255,5 @@ INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, expInt) ;:}
 |
 MINUS INTLIT:expint
-{: RESULT = new OpExp(expintleft,expintright,7,,expInt);:}
+{: RESULT = new OpExp(expintleft,expintright,7,new IntExp(left,right,0),expInt);:}
 ;
