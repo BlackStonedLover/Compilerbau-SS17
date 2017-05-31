@@ -99,7 +99,7 @@ Paralist::=
 {: RESULT = new DecList() ; :}
 |
 Paralist2:pl
-{: RESULT = pl;}
+{: RESULT = pl;:}
 ;
 
 Paralist2::=
@@ -150,7 +150,6 @@ SEMIC:s
 IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStmt (i.left,i.right,t,s1,s2 ;:};
 
-
 OptElse::=
 {: RESULT = new EmptyStm(left,right) ;:}
 |
@@ -161,7 +160,7 @@ ELSE:t Stmt:s1
 
 WhileStmt::=
 WHILE:w LPAREN Condition:t RPAREN Stmt:b
-{: RESULT = new WhileStmt (w.left,w.right,t,b ;};
+{: RESULT = new WhileStmt (w.left,w.right,t,b ;:};
 
 AssignStmt::=
   Variable:l ASGN:o Expressions:r
