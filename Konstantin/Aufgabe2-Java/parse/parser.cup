@@ -129,13 +129,17 @@ Stmt::=
 IfStmt:i
 {: RESULT = i; :}
 |
-WhileStmt: w
+WhileStmt:w
 {: RESULT = w; :}
 |
+<<<<<<< HEAD
 AssignStmt:a SEMIC
+=======
+AssignStmt:a
+>>>>>>> 4145ad9101bd242962fb27d2fcc16af2fef3627a
 {: RESULT = a; :}
 |
-ProcCall: pc
+ProcCall:pc SEMIC
 {: RESULT = pc; :}
 |
 CompoundStmt:c
@@ -172,7 +176,7 @@ LCURL:i StmtList:s RCURL
 ;
 
 ProcCall::=
-IDENT:i LPAREN Paralist:n RPAREN SEMIC
+IDENT:i LPAREN ExpressionsList:n RPAREN
 {: RESULT = new CallStm(i.left,i.right,Sym.newSym(i),n ;:}
 ;
 
@@ -211,6 +215,13 @@ Expressions:expOne NE:OP Expressions:expTwo
 |
 Expressions:expOne EQ:OP Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+;
+
+ExpressionsList::=
+{: RESULT = new EmptyStm(left,right) ;:}
+|
+Expressions:e1 ExpressionsList:e2
+{:RESULT = new ExpList(e1,e2);:}
 ;
 
 Expressions::=
