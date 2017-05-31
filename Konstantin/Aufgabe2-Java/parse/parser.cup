@@ -78,7 +78,7 @@ VAR IDENT COLON IDENT SEMIC Deklaration:abs
 
 Paralist::=
 :s
-{: RESULT = new EmptyStm (s.left,s.right) ; :}
+{: RESULT = new DecList (s.left,s.right) ; :}
 |
 Para:s COMMA Paralist
 {: RESULT = s ;:}
@@ -116,8 +116,7 @@ AssignStmt: a
 ProcCall: pc
 {: RESULT = pc; :}
 |
-CompoundStmt:
-c
+CompoundStmt:c
 {:RESULT = c:}
 SEMIC:
 :s
@@ -132,7 +131,7 @@ OptElse::=
 {: RESULT = new EmptyStm(left,right) ;:}
 |
 ELSE:t Stmt:s1
-{: RESULT = new IfStmt (t.left,t.right,(Exp)t,(Stm)s1,null;:}
+{: RESULT = s1;:}
 ;
 
 
@@ -156,9 +155,7 @@ IDENT:i LPAREN Paralist:n RPAREN SEMIC
 {: RESULT = new CallStm(i.left,i.right,(Sym)i, (ExpList)n ;:}
 ;
 
-LeftHandSide::
-{: RESULT = new EmptyStm(left,right);:}
-|
+LeftHandSide::=
 Variable:v
 {: RESULT = v ;:};
 
@@ -166,7 +163,7 @@ Variable::=
 IDENT:id
 {: RESULT = new SimpleVar(id.left,id.right,(Sym)id ;:}
 |
-VariableArray: va
+VariableArray:va
 {: RESULT = va ;:}
 ;
 
@@ -207,7 +204,8 @@ Expressions:expOne MINUS:OP Expressions:expTwo
 Expressions:expOne PLUS:OP Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-ExpressionsOne
+ExpressionsOne:eo
+{:RESULT = eo;:}
 ;
 
 ExpressionsOne::=
@@ -217,34 +215,21 @@ Expressions:expOne STAR:OP ExpressionTwo:expTwo
 Expressions:expOne SLASH:OP ExpressionTwo:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-ExpressionTwo
+ExpressionTwo:et
+{:RESULT = et ;:}
 ;
 
 ExpressionTwo::=
-MINUS INTLIT|
+MINUS INTLIT:expint
+{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}|
 INTLIT:expInt
-{: RESULT= new IntExp(expInt.left,expInt.right, expIntvalue) ;:}
+{: RESULT= new IntExp(expInt.left,expInt.right, expInt) ;:}
 |
 Variable:ExpVar
 {: RESULT= new VarExp(ExpVar.left,ExpVar.right, (Var))expVar) ;:}
 |
-VariableArray|
-LPAREN Expressions RPAREN
+VariableArray:varar
+{:RESULT = varar;:}|
+LPAREN Expressions:e RPAREN
+{:RESULT = e ;:}
 ;
-
-
-
-
-
-
-
-Operator::=
-LT |
-LE |
-GE |
-GT |
-EQ |
-PLUS|
-MINUS|
-STAR|
-SLASH;
