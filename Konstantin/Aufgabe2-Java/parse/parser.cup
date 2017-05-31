@@ -77,14 +77,18 @@ VAR IDENT COLON IDENT SEMIC Deklaration:abs
 
 
 Paralist::=
-:s
-{: RESULT = new DecList (s.left,s.right) ; :}
+{: RESULT = new DecList() ; :}
 |
-Para:s COMMA Paralist
-{: RESULT = s ;:}
+Paralist2:pl
+{: RESULT = pl;}
+;
+
+Paralist2::=
+Para:h COMMA Paralist2:t
+{: RESULT = new Declist(h,t) ;:}
 |
-Para:s
-{: RESULT = s ;:};
+Para:h
+{: RESULT = new Declist(h,new Declist()) ;:};
 
 
 Para::=
