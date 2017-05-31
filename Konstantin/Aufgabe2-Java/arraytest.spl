@@ -1,0 +1,14 @@
+type a = array [5] of int;
+type b = array [10] of a;
+type c = array [5] of array [5] of array [4] of a;
+
+
+proc main(){
+  var e: a;
+  var d: b;
+  var z: c;
+  e[4]:=3;
+  d[3][2] := 3;
+  z[2][4][3][3] := 2;
+
+}
