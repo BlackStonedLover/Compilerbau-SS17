@@ -23,7 +23,7 @@ parser code {:
 :}
 
 
-terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,ASGN,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COMMA,COLON;
+terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COLON;
 terminal Integer INTLIT;
 terminal String IDENT;
 
@@ -38,8 +38,6 @@ non terminal    ArrayTy Array;
 non terminal    StmList StmtList;
 non terminal    Stm Stmt;
 non terminal    Dec Para;
-non terminal    Var LeftHandSide;
-non terminal    Exp RightHandSide;
 non terminal    IfStmt;
 non terminal    WhileStmt;
 non terminal    AssignStmt;
@@ -134,7 +132,7 @@ IfStmt:i
 WhileStmt: w
 {: RESULT = w; :}
 |
-AssignStmt: a
+AssignStmt:a SEMIC
 {: RESULT = a; :}
 |
 ProcCall: pc
@@ -164,10 +162,9 @@ WHILE:w LPAREN Condition:t RPAREN Stmt:b
 {: RESULT = new WhileStmt (w.left,w.right,t,b ;};
 
 AssignStmt::=
-  LeftHandSide:l ASGN RightHandSide:r
+  Variable:l ASGN Expressions:r
   {: RESULT = new AssignStmt(l.left,r.right,l,r) ;:}
   ;
-
 
 CompoundStmt::=
 LCURL:i StmtList:s RCURL
@@ -179,14 +176,6 @@ IDENT:i LPAREN Paralist:n RPAREN SEMIC
 {: RESULT = new CallStm(i.left,i.right,Sym.newSym(i),n ;:}
 ;
 
-LeftHandSide::=
-Variable:v
-{: RESULT = v ;:};
-
-RightHandSide::=
-Expressions:exp
-{: RESULT = exp ;:}
-;
 
 Variable::=
 IDENT:id
