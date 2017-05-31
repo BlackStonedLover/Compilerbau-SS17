@@ -27,7 +27,7 @@ terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,ASGN,PLUS,MINUS,STAR,SLA
 terminal Integer INTLIT;
 terminal String IDENT;
 
-non terminal    Dec Program;
+non terminal    DecList Program;
 non terminal    DecList TypV;
 non terminal    DecList Prozedur;
 non terminal    ExpList Paralist;
@@ -50,7 +50,7 @@ non terminal    Variable;
 non terminal    Var VariableArray;
 non terminal    Exp Expressions;
 non terminal    Exp ExpressionsOne;
-non terminal    Exp ExpressionTwo;
+non terminal    Exp ExpressionsTwo;
 non terminal    Exp Condition;
 
 start with Program;
@@ -142,6 +142,7 @@ ProcCall: pc
 |
 CompoundStmt:c
 {:RESULT = c:}
+|
 SEMIC:s
 {: RESULT = new EmptyStm (s.left,s.right) ; :}
 ;
@@ -182,6 +183,11 @@ LeftHandSide::=
 Variable:v
 {: RESULT = v ;:};
 
+RightHandSide::=
+Expressions:exp
+{: RESULT = exp ;:}
+;
+
 Variable::=
 IDENT:id
 {: RESULT = new SimpleVar(id.left,id.right,Sym.newSym(id) ;:}
@@ -197,9 +203,6 @@ IDENT:arrIdent LBRACK Expressions:arrID RBRACK
 {: RESULT = new ArrayVar(arrIdent.left,arrIdent.right, arrIdent, arrID) ;:}
 ;
 
-RightHandSide::=Expressions:exp
-{: RESULT = exp ;:}
-;
 
 Condition::=
 Expressions:expOne LT:OP Expressions:expTwo
@@ -222,10 +225,10 @@ Expressions:expOne EQ:OP Expressions:expTwo
 ;
 
 Expressions::=
-Expressions:expOne MINUS:OP Expressions:expTwo
+Expressions:expOne MINUS:OP ExpressionsOne:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne PLUS:OP Expressions:expTwo
+Expressions:expOne PLUS:OP ExpressionsOne:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
 ExpressionsOne:eo
@@ -233,17 +236,17 @@ ExpressionsOne:eo
 ;
 
 ExpressionsOne::=
-Expressions:expOne STAR:OP ExpressionTwo:expTwo
+ExpressionsOne:expOne STAR:OP ExpressionsTwo:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne SLASH:OP ExpressionTwo:expTwo
+ExpressionsOne:expOne SLASH:OP ExpressionsTwo:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-ExpressionTwo:et
+ExpressionsTwo:et
 {:RESULT = et ;:}
 ;
 
-ExpressionTwo::=
+ExpressionsTwo::=
 MINUS INTLIT:expint
 {: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}|
 INTLIT:expInt
@@ -252,8 +255,6 @@ INTLIT:expInt
 Variable:ExpVar
 {: RESULT= new VarExp(ExpVar.left,ExpVar.right,expVar) ;:}
 |
-VariableArray:varar
-{:RESULT = varar;:}|
 LPAREN Expressions:e RPAREN
 {:RESULT = e ;:}
 ;
