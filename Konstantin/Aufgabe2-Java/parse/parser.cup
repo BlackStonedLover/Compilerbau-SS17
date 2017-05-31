@@ -86,8 +86,8 @@ ARRAY:a LBRACK INTLIT:count RBRACK OF IDENT:t
 ;
 
 Prozedur::=
-PROC:p IDENT:s LPAREN Paralist RPAREN LCURL Deklaration:p StmtList:b RCURL
-{: RESULT = new ProcDec(p.left, p.right, Sym.newSym(s),p,b) ;:};
+PROC:p IDENT:s LPAREN Paralist:p RPAREN LCURL Deklaration:d StmtList:b RCURL
+{: RESULT = new ProcDec(p.left, p.right, Sym.newSym(s),p,d,b) ;:};
 
 Deklaration ::=
 {: RESULT = new DecList() ;:}
@@ -195,23 +195,23 @@ IDENT:arrIdent LBRACK Expressions:arrID RBRACK
 
 
 Condition::=
-Expressions:expOne LT:LST Expressions:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne LT Expressions:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,LST,expOne,expTwo);:}
 |
-Expressions:expOne LE:LSE Expressions:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne LE Expressions:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,LSE,expOne,expTwo);:}
 |
-Expressions:expOne GE:GRE Expressions:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne GE Expressions:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,GRE,expOne,expTwo);:}
 |
-Expressions:expOne GT:GRT Expressions:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne GT Expressions:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,GRT,expOne,expTwo);:}
 |
-Expressions:expOne NE:NEQ Expressions:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne NE Expressions:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,NEQ,expOne,expTwo);:}
 |
-Expressions:expOne EQ:EQU Expressions:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne EQ Expressions:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,EQU,expOne,expTwo);:}
 ;
 
 ExpressionsList::=
@@ -222,36 +222,37 @@ Expressions:e1 ExpressionsList:e2
 ;
 
 Expressions::=
-Expressions:expOne MINUS:SUB ExpressionsOne:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne MINUS ExpressionsOne:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,SUB,expOne,expTwo);:}
 |
-Expressions:expOne PLUS:ADD ExpressionsOne:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+Expressions:expOne PLUS ExpressionsOne:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,ADD,expOne,expTwo);:}
 |
 ExpressionsOne:eo
 {:RESULT = eo;:}
 ;
 
 ExpressionsOne::=
-ExpressionsOne:expOne STAR:MUL ExpressionsTwo:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+ExpressionsOne:expOne STAR ExpressionsTwo:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,MUL,expOne,expTwo);:}
 |
-ExpressionsOne:expOne SLASH:DIV ExpressionsTwo:expTwo
-{:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
+ExpressionsOne:expOne SLASH ExpressionsTwo:expTwo
+{:RESULT = new OpExp(expOne.left,expOne.right,DIV,expOne,expTwo);:}
 |
 ExpressionsTwo:et
 {:RESULT = et ;:}
 ;
 
 ExpressionsTwo::=
-MINUS INTLIT:expint
-{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}|
+
+LPAREN Expressions:e RPAREN
+{:RESULT = e ;:}|
+Variable:expVar
+{: RESULT= new VarExp(expVar.left,expVar.right,expVar) ;:}
+|
 INTLIT:expInt
 {: RESULT= new IntExp(expInt.left,expInt.right, expInt) ;:}
-|
-Variable:ExpVar
-{: RESULT= new VarExp(ExpVar.left,ExpVar.right,expVar) ;:}
-|
-LPAREN Expressions:e RPAREN
-{:RESULT = e ;:}
+/*|
+MINUS INTLIT:expint
+{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}*/
 ;
