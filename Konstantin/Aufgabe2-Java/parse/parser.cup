@@ -49,8 +49,13 @@ non terminal    Stm OptElse;
 non terminal    Variable;
 non terminal    Var VariableArray;
 non terminal    Exp Expressions;
+<<<<<<< HEAD
 non terminal    ExpressionsOne;
 non terminal    ExpressionTwo;
+=======
+non terminal    Exp Condition;
+
+>>>>>>> 255dc1f7b462d26e8c6fc764676d0e02a1303203
 
 start with Program;
 
@@ -145,7 +150,7 @@ SEMIC:s
 {: RESULT = new EmptyStm (s.left,s.right) ; :}
 ;
 
-IfStmt::=IF:i LPAREN Expressions:t RPAREN Stmt:s1 OptElse:s2
+IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStmt (i.left,i.right,t,s1,s2 ;:};
 
 
@@ -158,7 +163,7 @@ ELSE:t Stmt:s1
 
 
 WhileStmt::=
-WHILE:w LPAREN Expressions:t RPAREN Stmt:b
+WHILE:w LPAREN Condition:t RPAREN Stmt:b
 {: RESULT = new WhileStmt (w.left,w.right,t,b ;};
 
 AssignStmt::=
@@ -200,8 +205,7 @@ RightHandSide::=Expressions:exp
 {: RESULT = exp ;:}
 ;
 
-
-Expressions::=
+Condition::=
 Expressions:expOne LT:OP Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
@@ -219,7 +223,9 @@ Expressions:expOne NE:OP Expressions:expTwo
 |
 Expressions:expOne EQ:OP Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
-|
+;
+
+Expressions::=
 Expressions:expOne MINUS:OP Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
