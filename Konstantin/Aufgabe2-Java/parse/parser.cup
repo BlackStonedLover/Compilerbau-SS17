@@ -49,13 +49,9 @@ non terminal    Stm OptElse;
 non terminal    Variable;
 non terminal    Var VariableArray;
 non terminal    Exp Expressions;
-<<<<<<< HEAD
-non terminal    ExpressionsOne;
-non terminal    ExpressionTwo;
-=======
+non terminal    Exp ExpressionsOne;
+non terminal    Exp ExpressionTwo;
 non terminal    Exp Condition;
-
->>>>>>> 255dc1f7b462d26e8c6fc764676d0e02a1303203
 
 start with Program;
 
