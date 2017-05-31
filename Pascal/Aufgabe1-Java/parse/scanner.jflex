@@ -1,7 +1,7 @@
 /*
  * scanner.jflex -- SPL scanner specification
  */
- 
+
 import java_cup.runtime.*;
 
 package parse;
@@ -129,8 +129,8 @@ package parse;
 	case sym.VAR:
         s = "-- VAR --";
         break;
-		
-		
+
+
       default:
         /* this should never happen */
         throw new RuntimeException(
@@ -154,11 +154,11 @@ package parse;
 "if" {return symbol(sym.IF);}
 "array" {return symbol(sym.Array);}
 "else" {return symbol(sym.ELSE);}
-"of" {return symbol(sym.of);}
-"proc" {return symbol(sym.proc);}
-"ref" {return symbol(sym.ref);}
-"type" {return symbol(sym.var);}
-"while" {return symbol(sym.while);}
+"of" {return symbol(sym.OF);}
+"proc" {return symbol(sym.PROC);}
+"ref" {return symbol(sym.REF);}
+"type" {return symbol(sym.VAR);}
+"while" {return symbol(sym.WHILE);}
 
 //Operatoren
 
@@ -184,15 +184,15 @@ package parse;
 "/" {return symbol(sym.SLASH);}
 
 
-" " {} 
+" " {}
 "/t" {}
 "\n" {}
 [0-9]+ {return symbol(sym.INTLIT,(int)yytext();}
-0x[0-9a-fA-F]+ {return symbol(sym.INTLIT,parseInt(yytext).substring(2);}
+0x[0-9a-fA-F]+ {return symbol(sym.INTLIT,parseInt(yytext).substring(2));}
 [a-zA-Z_][0-9a-zA-Z_]* {return symbol(sym.IDENT,yytext());}
 \/\/.* {}
-\'\\n\' {return symbol(sym.INTLIT,10;(}
-\'.\' {return symbol(sym.INTLIT,character.getNumericValue(yytext().charAt(1));}
+'\\n' {return symbol(sym.INTLIT,10);)}
+'.' {return symbol(sym.INTLIT,character.getNumericValue(yytext().charAt(1)));}
 
 
 .		{
