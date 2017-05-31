@@ -6,7 +6,7 @@
 package parse;
 
 import java_cup.runtime.*;
-import abysn.*;
+import absyn.*;
 import sym.*;
 
 parser code {:
@@ -64,7 +64,7 @@ Program::=|
 
 
 TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
-{: RESULT = new TypeDec(t.left,t.right,Sym.newSym(sn),tt ;:}
+{: RESULT = new TypeDec(t.left,t.right,Sym.newSym(sn),tt) ;:}
 ;
 
 Typ::=
