@@ -27,10 +27,31 @@ terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,ASGN,PLUS,MINUS,STAR,SLA
 terminal Integer INTLIT;
 terminal String IDENT;
 
+non terminal    Dec Program;
+non terminal    DecList TypV;
+non terminal    DecList Prozedur;
+non terminal    ExpList Paralist;
+non terminal    ExpList Paralist2;
+non terminal    DecList Deklaration;
+non terminal    Ty Typ;
+non terminal    ArrayTy Array;
+non terminal    StmList StmtList;
+non terminal    Stm Stmt;
+non terminal    Dec Para;
+non terminal    Var LeftHandSide;
+non terminal    Exp RightHandSide;
+non terminal    IfStmt;
+non terminal    WhileStmt;
+non terminal    AssignStmt;
+non terminal    ProcCall;
+non terminal    CompoundStmt;
+non terminal    Stm OptElse;
+non terminal    Variable;
+non terminal    Var VariableArray;
+non terminal    Exp Expressions;
 
-non terminal		Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions, IfStmt,WhileStmt,AssignStmt,ProcCall,OptElse,Variable,VariableArray;
+
 start with Program;
-
 
 Program::=|
       TypV:t Program:h
@@ -49,7 +70,7 @@ TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
 
 Typ::=
 IDENT:id
-{: RESULT = id ;:}
+{: RESULT = new NameTy(id.left,id.right,Sym.newSym(id)) ;:}
 |
 Array: a
 {: RESULT = a ;:}
@@ -144,7 +165,7 @@ WHILE:w LPAREN Expressions:t RPAREN Stmt:b
 
 AssignStmt::=
   LeftHandSide:l ASGN RightHandSide:r
-  {: RESULT = new AssignStmt(l.left,r.right, (Var)v, (Exp)e) ;:}
+  {: RESULT = new AssignStmt(l.left,r.right, (Var)l, (Exp)r) ;:}
   ;
 
 
