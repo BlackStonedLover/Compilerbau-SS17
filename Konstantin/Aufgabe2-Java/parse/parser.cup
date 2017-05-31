@@ -23,7 +23,7 @@ parser code {:
 :}
 
 
-terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COLON;
+terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COLON,ASGN,COMMA;
 terminal Integer INTLIT;
 terminal String IDENT;
 
@@ -50,6 +50,7 @@ non terminal    Exp Expressions;
 non terminal    Exp ExpressionsOne;
 non terminal    Exp ExpressionsTwo;
 non terminal    Exp Condition;
+non terminal    ExpList ExpressionsList;
 
 start with Program;
 
@@ -132,11 +133,8 @@ IfStmt:i
 WhileStmt:w
 {: RESULT = w; :}
 |
-<<<<<<< HEAD
 AssignStmt:a SEMIC
-=======
 AssignStmt:a
->>>>>>> 4145ad9101bd242962fb27d2fcc16af2fef3627a
 {: RESULT = a; :}
 |
 ProcCall:pc SEMIC
@@ -166,8 +164,8 @@ WHILE:w LPAREN Condition:t RPAREN Stmt:b
 {: RESULT = new WhileStmt (w.left,w.right,t,b ;};
 
 AssignStmt::=
-  Variable:l ASGN Expressions:r
-  {: RESULT = new AssignStmt(l.left,r.right,l,r) ;:}
+  Variable:l ASGN:o Expressions:r
+  {: RESULT = new AssignStmt(o.left,o.right,l,r) ;:}
   ;
 
 CompoundStmt::=
@@ -198,22 +196,22 @@ IDENT:arrIdent LBRACK Expressions:arrID RBRACK
 
 
 Condition::=
-Expressions:expOne LT:OP Expressions:expTwo
+Expressions:expOne LT:LST Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne LE:OP Expressions:expTwo
+Expressions:expOne LE:LSE Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne GE:OP Expressions:expTwo
+Expressions:expOne GE:GRE Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne GT:OP Expressions:expTwo
+Expressions:expOne GT:GRT Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne NE:OP Expressions:expTwo
+Expressions:expOne NE:NEQ Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne EQ:OP Expressions:expTwo
+Expressions:expOne EQ:EQU Expressions:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 ;
 
@@ -225,10 +223,10 @@ Expressions:e1 ExpressionsList:e2
 ;
 
 Expressions::=
-Expressions:expOne MINUS:OP ExpressionsOne:expTwo
+Expressions:expOne MINUS:SUB ExpressionsOne:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-Expressions:expOne PLUS:OP ExpressionsOne:expTwo
+Expressions:expOne PLUS:ADD ExpressionsOne:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
 ExpressionsOne:eo
@@ -236,10 +234,10 @@ ExpressionsOne:eo
 ;
 
 ExpressionsOne::=
-ExpressionsOne:expOne STAR:OP ExpressionsTwo:expTwo
+ExpressionsOne:expOne STAR:MUL ExpressionsTwo:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
-ExpressionsOne:expOne SLASH:OP ExpressionsTwo:expTwo
+ExpressionsOne:expOne SLASH:DIV ExpressionsTwo:expTwo
 {:RESULT = new OpExp(expOne.left,expOne.right,OP,expOne,expTwo);:}
 |
 ExpressionsTwo:et
