@@ -6,7 +6,7 @@
 package parse;
 
 import java_cup.runtime.*;
-import abysn.*;
+import absyn.*;
 import sym.*;
 
 parser code {:
@@ -64,7 +64,7 @@ Program::=|
 
 
 TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
-{: RESULT = new TypeDec(t.left,t.right,Sym.newSym(sn),tt ;:}
+{: RESULT = new TypeDec(t.left,t.right,Sym.newSym(sn),tt) ;:}
 ;
 
 Typ::=
@@ -144,11 +144,10 @@ CompoundStmt:c
 {:RESULT = c:}
 |
 SEMIC:s
-{: RESULT = new EmptyStm (s.left,s.right) ; :}
-;
+{: RESULT = new EmptyStm (s.left,s.right) ; :};
 
 IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
-{: RESULT = new IfStmt (i.left,i.right,t,s1,s2 ;:};
+{: RESULT = new IfStmt (i.left,i.right,t,s1,s2 );:};
 
 OptElse::=
 {: RESULT = new EmptyStm(left,right) ;:}
@@ -160,7 +159,7 @@ ELSE:t Stmt:s1
 
 WhileStmt::=
 WHILE:w LPAREN Condition:t RPAREN Stmt:b
-{: RESULT = new WhileStmt (w.left,w.right,t,b ;:};
+{: RESULT = new WhileStmt (w.left,w.right,t,b) ;:};
 
 AssignStmt::=
   Variable:l ASGN:o Expressions:r
@@ -174,13 +173,12 @@ LCURL:i StmtList:s RCURL
 
 ProcCall::=
 IDENT:i LPAREN ExpressionsList:n RPAREN
-{: RESULT = new CallStm(i.left,i.right,Sym.newSym(i),n ;:}
+{: RESULT = new CallStm(i.left,i.right,Sym.newSym(i),n) ;:}
 ;
-
 
 Variable::=
 IDENT:id
-{: RESULT = new SimpleVar(id.left,id.right,Sym.newSym(id) ;:}
+{: RESULT = new SimpleVar(id.left,id.right,Sym.newSym(id)) ;:}
 |
 VariableArray:va
 {: RESULT = va ;:}
@@ -215,7 +213,7 @@ Expressions:expOne EQ Expressions:expTwo
 ;
 
 ExpressionsList::=
-{: RESULT = new ExpList() ;:}
+{: RESULT = new EmptyStm(left,right) ;:}
 |
 Expressions:e1 ExpressionsList:e2
 {:RESULT = new ExpList(e1,e2);:}
@@ -252,7 +250,7 @@ Variable:expVar
 
 INTLIT:expInt
 {: RESULT= new IntExp(expInt.left,expInt.right, expInt) ;:}
-
+/*|
 MINUS INTLIT:expint
-{: RESULT = new OPExp(expint.left,expint.right,0 - expint);:}
+{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}*/
 ;
