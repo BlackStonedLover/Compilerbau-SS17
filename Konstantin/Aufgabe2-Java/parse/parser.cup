@@ -244,8 +244,9 @@ ExpressionsTwo:et
 ;
 
 ExpressionsTwo::=
-MINUS INTLIT:expint
-{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}|
+/*MINUS INTLIT:expint
+{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}
+| */
 INTLIT:expInt
 {: RESULT= new IntExp(expInt.left,expInt.right, expInt) ;:}
 |

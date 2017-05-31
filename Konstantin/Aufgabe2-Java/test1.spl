@@ -1,0 +1,19 @@
+proc main(){
+    var hexadezimal1: int;
+    var leerzeichen: int;
+    var s: int;
+    var b: int;
+    var zeilenUmbruch: int;
+    var a: int;
+    var hexadezimal2: int;
+    var drei: int;
+
+    hexadezimal1:= 0x6d35a;
+    leerzeichen:= ' ';
+    s:= 's';
+    b:= 'b';
+    zeilenUmbruch:= '\n';
+    a:= 'a';
+    hexadezimal2:= 0x1a2f3F4e;
+    drei:= 3;
+}

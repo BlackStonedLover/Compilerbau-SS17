@@ -8,7 +8,6 @@ package main;
 import java.io.*;
 import java_cup.runtime.Symbol;
 import parse.*;
-import absyn.*;
 
 
 class Main {
@@ -18,22 +17,17 @@ class Main {
     System.out.print("Usage: spl [options] <input file>\n");
     System.out.print("Options:\n");
     System.out.print("  --tokens         show stream of tokens\n");
-    System.out.print("  --absyn          show abstract syntax\n");
     System.out.print("  --help           show this help\n");
   }
 
   public static void main(String[] args) {
     String inFileName = null;
     boolean optionTokens = false;
-    boolean optionAbsyn = false;
     for (int i = 0; i < args.length; i++) {
       if (args[i].charAt(0) == '-') {
         /* option */
         if (args[i].equals("--tokens")) {
           optionTokens = true;
-        } else
-        if (args[i].equals("--absyn")) {
-          optionAbsyn = true;
         } else
         if (args[i].equals("--help")) {
           help();
@@ -70,12 +64,7 @@ class Main {
         System.exit(0);
       }
       Parser parser = new Parser(scanner);
-      DecList program = (DecList) parser.parse().value;
-      if (optionAbsyn) {
-        program.show(0);
-        System.out.println();
-        System.exit(0);
-      }
+      parser.debug_parse();
     } catch (FileNotFoundException e) {
       System.out.println("**** Error: cannot open input file '" +
                          inFileName + "'");
