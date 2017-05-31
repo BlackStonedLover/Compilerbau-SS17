@@ -215,7 +215,7 @@ Expressions:expOne EQ Expressions:expTwo
 ;
 
 ExpressionsList::=
-{: RESULT = new EmptyStm(left,right) ;:}
+{: RESULT = new ExpList() ;:}
 |
 Expressions:e1 ExpressionsList:e2
 {:RESULT = new ExpList(e1,e2);:}
@@ -252,7 +252,7 @@ Variable:expVar
 
 INTLIT:expInt
 {: RESULT= new IntExp(expInt.left,expInt.right, expInt) ;:}
-/*|
+
 MINUS INTLIT:expint
-{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}*/
+{: RESULT = new OPExp(expint.left,expint.right,0 - expint);:}
 ;
