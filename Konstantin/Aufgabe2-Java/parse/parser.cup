@@ -150,7 +150,8 @@ IfStmt::=IF:i LPAREN Expressions:t RPAREN Stmt:s1 OptElse:s2
 
 
 OptElse::=
-{: RESULT = new EmptyStm(left,right) ;:}
+s:
+{: RESULT = new EmptyStm(s.left,s.right) ;:}
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
