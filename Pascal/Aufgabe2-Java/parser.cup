@@ -1,0 +1,259 @@
+/*
+ * parser.cup -- SPL parser specification
+ */
+
+
+package parse;
+
+import java_cup.runtime.*;
+import absyn.*;
+import sym.*;
+
+parser code {:
+
+  public void syntax_error(Symbol currToken) {
+    System.out.println(
+      "**** Error: syntax error" +
+      " in line " + currToken.left +
+      ", column " + currToken.right
+    );
+    System.exit(0);
+  }
+
+:}
+
+
+terminal ARRAY,IF,ELSE,VAR,WHILE,REF,PROC,OF,TYPE,LE,GE,PLUS,MINUS,STAR,SLASH,EQ,NE,LT,GT,RPAREN,LPAREN,RCURL,LCURL,RBRACK,LBRACK,SEMIC,COLON,ASGN,COMMA;
+terminal Integer INTLIT;
+terminal String IDENT;
+
+non terminal    DecList Program;
+non terminal    Dec     TypV;
+non terminal    Dec     Prozedur;
+non terminal    DecList Paralist;
+non terminal    DecList Paralist2;
+non terminal    DecList Deklaration;
+non terminal    Dec     VariablenDec;
+non terminal    Ty      Typ;
+non terminal    StmList StmtList;
+non terminal    Stm     Stmt;
+non terminal    Dec     Para;
+non terminal    Stm     IfStmt;
+non terminal    Stm     WhileStmt;
+non terminal    Stm     AssignStmt;
+non terminal    Stm     ProcCall;
+non terminal    Stm     CompoundStmt;
+non terminal    Stm     OptElse;
+non terminal    Var     Variable;
+non terminal    Var     VariableArray;
+non terminal    Var     SimpleV;
+non terminal    Exp     Expressions;
+non terminal    Exp     ExpressionsOne;
+non terminal    Exp     ExpressionsTwo;
+non terminal    Exp     Condition;
+non terminal    ExpList ExpressionsList;
+
+start with Program;
+
+Program::=|
+      TypV:h Program:t
+	  {: RESULT = new DecList(h,t) ;:}
+      |
+      Prozedur:h Program:t
+	  {: RESULT = new DecList(h,t) ;:}
+      ;
+
+
+TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
+{: RESULT = new TypeDec(tleft,tright,Sym.newSym(sn),tt) ;:}
+;
+
+Typ::=
+IDENT:id
+{: RESULT = new NameTy(idleft,idright,Sym.newSym(id)) ;:}
+|
+ARRAY:ar LBRACK INTLIT:count RBRACK OF Typ:t
+{: RESULT = new ArrayTy(arleft, arright, count,t) ;:}
+;
+
+
+
+Prozedur::=
+PROC:pr IDENT:s LPAREN Paralist:p RPAREN LCURL Deklaration:d StmtList:b RCURL
+{: RESULT = new ProcDec(prleft, prright, Sym.newSym(s),p,d,b) ;:};
+
+Deklaration ::=
+{: RESULT = new DecList() ;:}
+|
+VariablenDec:h Deklaration:t
+{: RESULT = new DecList(h,t) ;:};
+
+VariablenDec::=
+VAR IDENT:n COLON Typ:t SEMIC
+{: RESULT = new VarDec(nleft,nright,Sym.newSym(n),t); :}
+;
+
+Paralist::=
+{: RESULT = new DecList() ; :}
+|
+Paralist2:pl
+{: RESULT = pl;:}
+;
+
+Paralist2::=
+Para:h COMMA Paralist2:t
+{: RESULT = new DecList(h,t) ;:}
+|
+Para:h
+{: RESULT = new DecList(h,new DecList()) ;:};
+
+
+Para::=
+IDENT:idt COLON Typ:tipe
+{: RESULT = new ParDec(idtleft,idtright,Sym.newSym(idt),tipe,false);:}
+|
+REF IDENT:idt COLON Typ:tipe
+{: RESULT = new ParDec(idtleft,idtright,Sym.newSym(idt),tipe,true);:}
+;
+
+
+StmtList::=
+{: RESULT = new StmList() ;:}
+|
+Stmt:h StmtList:t
+{: RESULT = new StmList(h,t) ;:};
+
+/*
+TODO: Error: object cannot be converted to StmList
+*/
+Stmt::=
+IfStmt:i
+{: RESULT = i; :}
+|
+WhileStmt:w
+{: RESULT = w; :}
+|
+AssignStmt:a SEMIC
+{: RESULT = a; :}
+|
+ProcCall:pc SEMIC
+{: RESULT = pc; :}
+|
+CompoundStmt:c
+{:RESULT = c;:}
+|
+SEMIC:s
+{: RESULT = new EmptyStm (sleft,sright) ; :};
+
+IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
+{: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
+/*
+TODO: EmptyStm muss geändert werden
+*/
+OptElse::=
+|
+ELSE:t Stmt:s1
+{: RESULT = s1;:}
+;
+
+
+WhileStmt::=
+WHILE:w LPAREN Condition:t RPAREN Stmt:b
+{: RESULT = new WhileStm (wleft,wright,t,b) ;:};
+
+AssignStmt::=
+  Variable:l ASGN:o Expressions:r
+  {: RESULT = new AssignStm(oleft,oright,l,r) ;:}
+  ;
+
+CompoundStmt::=
+LCURL:i StmtList:s RCURL
+{:RESULT = new CompStm(ileft,iright,s);:}
+;
+
+ProcCall::=
+IDENT:i LPAREN ExpressionsList:n RPAREN
+{: RESULT = new CallStm(ileft,iright,Sym.newSym(i),n) ;:}
+;
+
+Variable::=
+SimpleV:id
+{: RESULT = id ;:}
+|
+VariableArray:va
+{: RESULT = va ;:}
+;
+
+SimpleV::=
+IDENT:i
+{: RESULT = new SimpleVar(ileft,iright,Sym.newSym(i)) ;:}
+;
+
+VariableArray::= VariableArray:va LBRACK Expressions:exp RBRACK
+{: RESULT = new ArrayVar(valeft,varight,va,exp) ;:}
+|
+SimpleV:arrIdent LBRACK Expressions:arrID RBRACK
+{: RESULT = new ArrayVar(arrIdentleft,arrIdentright, arrIdent, arrID) ;:}
+;
+
+Condition::=
+Expressions:expOne LT Expressions:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,2,expOne,expTwo);:}
+|
+Expressions:expOne LE Expressions:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,3,expOne,expTwo);:}
+|
+Expressions:expOne GE Expressions:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,5,expOne,expTwo);:}
+|
+Expressions:expOne GT Expressions:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,4,expOne,expTwo);:}
+|
+Expressions:expOne NE Expressions:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,1,expOne,expTwo);:}
+|
+Expressions:expOne EQ Expressions:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,0,expOne,expTwo);:}
+;
+
+ExpressionsList::=
+{: RESULT = new ExpList() ;:}
+|
+Expressions:e1 ExpressionsList:e2
+{:RESULT = new ExpList(e1,e2);:}
+;
+
+Expressions::=
+Expressions:expOne MINUS ExpressionsOne:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,7,expOne,expTwo);:}
+|
+Expressions:expOne PLUS ExpressionsOne:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,6,expOne,expTwo);:}
+|
+ExpressionsOne:eo
+{:RESULT = eo;:}
+;
+
+ExpressionsOne::=
+ExpressionsOne:expOne STAR ExpressionsTwo:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,8,expOne,expTwo);:}
+|
+ExpressionsOne:expOne SLASH ExpressionsTwo:expTwo
+{:RESULT = new OpExp(expOneleft,expOneright,9,expOne,expTwo);:}
+|
+ExpressionsTwo:et
+{:RESULT = et ;:}
+;
+
+ExpressionsTwo::=
+LPAREN Expressions:e RPAREN
+{:RESULT = e ;:}|
+Variable:expVar
+{: RESULT= new VarExp(expVarleft,expVarright,expVar) ;:}
+|
+INTLIT:expInt
+{: RESULT= new IntExp(expIntleft,expIntright, expInt) ;:}
+|
+MINUS INTLIT:expint
+{: RESULT = new OpExp(expintleft,expintright,7,,expInt);:}
+;
