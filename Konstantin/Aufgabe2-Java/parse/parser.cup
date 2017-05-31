@@ -49,7 +49,8 @@ non terminal    Stm OptElse;
 non terminal    Variable;
 non terminal    Var VariableArray;
 non terminal    Exp Expressions;
-
+non terminal    ExpressionsOne;
+non terminal    ExpressionTwo;
 
 start with Program;
 
@@ -140,8 +141,7 @@ ProcCall: pc
 |
 CompoundStmt:c
 {:RESULT = c:}
-SEMIC:
-:s
+SEMIC:s
 {: RESULT = new EmptyStm (s.left,s.right) ; :}
 ;
 
@@ -150,8 +150,7 @@ IfStmt::=IF:i LPAREN Expressions:t RPAREN Stmt:s1 OptElse:s2
 
 
 OptElse::=
-s:
-{: RESULT = new EmptyStm(s.left,s.right) ;:}
+{: RESULT = new EmptyStm(left,right) ;:}
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}

@@ -1,0 +1,32 @@
+//
+// test02.spl -- Aufgabe 1c
+//
+
+type A5 = array [5] of int;
+
+  proc main(){
+    var a: A5;
+    var cnt: int;
+    cnt:=0;
+    sort(a);
+      while(cnt <5){
+        print(a[cnt]);
+      }
+  }
+
+  proc sort(ref a:A5 ){
+      var count: int;
+      count :=0;
+
+      while(count < 5){
+        if(a[count] > a[count+1]){
+            var tmp: int;
+            tmp := a[count];
+            a[count] := a[count+1];
+            a[count+1] := tmp;
+            count := count +1;
+        }else{
+          count := count +1;
+        }
+      }
+  }
