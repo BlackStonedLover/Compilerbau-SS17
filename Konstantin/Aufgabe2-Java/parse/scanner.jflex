@@ -1,9 +1,8 @@
 /*
 * scanner.jflex -- SPL scanner specification
 */
-
- import java_cup.runtime.*;
 package parse;
+import java_cup.runtime.*;
 
 
 %%
