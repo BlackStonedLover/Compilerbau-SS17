@@ -6,7 +6,8 @@
 package parse;
 
 import java_cup.runtime.*;
-
+import abysn.*;
+import sym.*;
 
 parser code {:
 
@@ -27,8 +28,7 @@ terminal Integer INTLIT;
 terminal String IDENT;
 
 
-non terminal		MatchSign,Operator,Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions,Ausdruck, IfStmt,WhileStmt,AssignStmt,ProcCall,OptElse,Variable,VariableArray,Expressions;
-
+non terminal		Program,TypV,Prozedur,Typ,Array,Paralist,Deklaration,StmtList,Stmt,Para,LeftHandSide,RightHandSide,Expressions, IfStmt,WhileStmt,AssignStmt,ProcCall,OptElse,Variable,VariableArray;
 start with Program;
 
 
