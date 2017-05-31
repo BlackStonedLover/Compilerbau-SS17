@@ -244,18 +244,12 @@ ExpressionsTwo:et
 ;
 
 ExpressionsTwo::=
-<<<<<<< HEAD
-
 LPAREN Expressions:e RPAREN
 {:RESULT = e ;:}|
 Variable:expVar
 {: RESULT= new VarExp(expVar.left,expVar.right,expVar) ;:}
 |
-=======
-/*MINUS INTLIT:expint
-{: RESULT = new IntExp(expint.left,expint.right,0 - expint);:}
-| */
->>>>>>> f7bc81a14bb09a937d71172de772afcd908a3976
+
 INTLIT:expInt
 {: RESULT= new IntExp(expInt.left,expInt.right, expInt) ;:}
 /*|
