@@ -55,7 +55,8 @@ non terminal    ExpList ExpressionsList;
 
 start with Program;
 
-Program::=|
+Program::=
+      |
       TypV:h Program:t
 	  {: RESULT = new DecList(h,t) ;:}
       |
@@ -123,9 +124,6 @@ StmtList::=
 Stmt:h StmtList:t
 {: RESULT = new StmList(h,t) ;:};
 
-/*
-TODO: Error: object cannot be converted to StmList
-*/
 Stmt::=
 IfStmt:i
 {: RESULT = i; :}
@@ -147,15 +145,13 @@ SEMIC:s
 
 IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
-/*
-TODO: EmptyStm muss geändert werden
-*/
+
 OptElse::=
+{: RESULT = ; :}
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
 ;
-
 
 WhileStmt::=
 WHILE:w LPAREN Condition:t RPAREN Stmt:b
@@ -258,4 +254,8 @@ INTLIT:expInt
 MINUS INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, 0 - expInt) ;:}
 
+/*
+MINUS INTLIT:expInt
+{: RESULT = new OpExp(expIntleft,expIntright,new IntExp(left,right,0),7,expInt) ;:}
+*/
 ;
