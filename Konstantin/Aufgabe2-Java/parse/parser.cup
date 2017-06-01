@@ -148,10 +148,6 @@ IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
 
 OptElse::=
-<<<<<<< HEAD
-
-=======
->>>>>>> 2e1307c5952dc3248f9a57e4b81c2176ae81f37f
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
