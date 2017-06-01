@@ -55,8 +55,10 @@ non terminal    ExpList ExpressionsList;
 
 start with Program;
 
-Program::=|
-      TypV:h Program:t
+Program::=
+{:RESULT = new DecList();:}
+|
+  TypV:h Program:t
 	  {: RESULT = new DecList(h,t) ;:}
       |
       Prozedur:h Program:t
@@ -118,7 +120,7 @@ REF IDENT:idt COLON Typ:tipe
 
 
 StmtList::=
-{: RESULT = new StmList() ;:}
+{: RESULT = new StmList();:}
 |
 Stmt:h StmtList:t
 {: RESULT = new StmList(h,t) ;:};
@@ -147,10 +149,9 @@ SEMIC:s
 
 IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
-/*
-TODO: EmptyStm muss geändert werden
-*/
+
 OptElse::=
+
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
@@ -219,9 +220,14 @@ Expressions:expOne EQ Expressions:expTwo
 ExpressionsList::=
 {: RESULT = new ExpList() ;:}
 |
+Expressions:e1
+{:RESULT = new ExpList(e1,new ExpList());:}
+|
 Expressions:e1 COMMA ExpressionsList:e2
 {:RESULT = new ExpList(e1,e2);:}
 ;
+
+
 
 Expressions::=
 Expressions:expOne MINUS ExpressionsOne:expTwo
@@ -257,5 +263,4 @@ INTLIT:expInt
 /*MINUS INTLIT*/
 MINUS INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, 0 - expInt) ;:}
-
 ;
