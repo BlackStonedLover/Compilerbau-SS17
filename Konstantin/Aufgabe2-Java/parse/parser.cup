@@ -56,15 +56,14 @@ non terminal    ExpList ExpressionsList;
 start with Program;
 
 Program::=
-
 {:RESULT = new DecList();:}
 |
-  TypV:h Program:t
-	  {: RESULT = new DecList(h,t) ;:}
-      |
-      Prozedur:h Program:t
-	  {: RESULT = new DecList(h,t) ;:}
-      ;
+TypV:h Program:t
+{: RESULT = new DecList(h,t) ;:}
+|
+Prozedur:h Program:t
+{: RESULT = new DecList(h,t) ;:}
+;
 
 
 TypV::=TYPE:t IDENT:sn EQ Typ:tt SEMIC
@@ -149,7 +148,6 @@ IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
 
 OptElse::=
-{: RESULT = ; :}
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
@@ -257,13 +255,8 @@ Variable:expVar
 INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, expInt) ;:}
 |
-/*MINUS INTLIT*/
+MINUS INTLIT
 MINUS INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, 0 - expInt) ;:}
-
-/*
-MINUS INTLIT:expInt
-{: RESULT = new OpExp(expIntleft,expIntright,new IntExp(left,right,0),7,expInt) ;:}
-*/
 
 ;
