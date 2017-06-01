@@ -56,14 +56,10 @@ non terminal    ExpList ExpressionsList;
 start with Program;
 
 Program::=
-<<<<<<< HEAD
-      |
-      TypV:h Program:t
-=======
+
 {:RESULT = new DecList();:}
 |
   TypV:h Program:t
->>>>>>> a355f5d95c3c0c97d1571e201e6cec4af249ad46
 	  {: RESULT = new DecList(h,t) ;:}
       |
       Prozedur:h Program:t
@@ -153,11 +149,7 @@ IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
 
 OptElse::=
-<<<<<<< HEAD
 {: RESULT = ; :}
-=======
-
->>>>>>> a355f5d95c3c0c97d1571e201e6cec4af249ad46
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
@@ -268,12 +260,10 @@ INTLIT:expInt
 /*MINUS INTLIT*/
 MINUS INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, 0 - expInt) ;:}
-<<<<<<< HEAD
 
 /*
 MINUS INTLIT:expInt
 {: RESULT = new OpExp(expIntleft,expIntright,new IntExp(left,right,0),7,expInt) ;:}
 */
-=======
->>>>>>> a355f5d95c3c0c97d1571e201e6cec4af249ad46
+
 ;
