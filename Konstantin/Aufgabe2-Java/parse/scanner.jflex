@@ -183,9 +183,9 @@ import java_cup.runtime.*;
         "\n" {}
           [a-zA-Z_][a-zA-Z0-9_]*    {return symbol(sym.IDENT,yytext());}
           [0-9]+    {return symbol(sym.INTLIT,Integer.parseInt(yytext()));}
-          0x[0-9a-fA-F]+ {return symbol(sym.INTLIT,Integer.parseInt(yytext().substring(2)));}
+          0x[0-9a-fA-F]+ {return symbol(sym.INTLIT,Integer.parseInt(yytext().substring(2), 16));}
           '\\n'  {return symbol(sym.INTLIT,10);}
-            '.' {return symbol(sym.INTLIT,Character.getNumericValue(yytext().charAt(1)) );}
+            '.' {return symbol(sym.INTLIT,Character.getNumericValue(yytext().(int)charAt(1)) );}
             .		{
                     throw new RuntimeException(
                       "illegal character 0x" +
