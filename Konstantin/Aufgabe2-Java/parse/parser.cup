@@ -56,8 +56,14 @@ non terminal    ExpList ExpressionsList;
 start with Program;
 
 Program::=
+<<<<<<< HEAD
       |
       TypV:h Program:t
+=======
+{:RESULT = new DecList();:}
+|
+  TypV:h Program:t
+>>>>>>> a355f5d95c3c0c97d1571e201e6cec4af249ad46
 	  {: RESULT = new DecList(h,t) ;:}
       |
       Prozedur:h Program:t
@@ -119,7 +125,7 @@ REF IDENT:idt COLON Typ:tipe
 
 
 StmtList::=
-{: RESULT = new StmList() ;:}
+{: RESULT = new StmList();:}
 |
 Stmt:h StmtList:t
 {: RESULT = new StmList(h,t) ;:};
@@ -147,7 +153,11 @@ IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
 
 OptElse::=
+<<<<<<< HEAD
 {: RESULT = ; :}
+=======
+
+>>>>>>> a355f5d95c3c0c97d1571e201e6cec4af249ad46
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
@@ -215,9 +225,14 @@ Expressions:expOne EQ Expressions:expTwo
 ExpressionsList::=
 {: RESULT = new ExpList() ;:}
 |
+Expressions:e1
+{:RESULT = new ExpList(e1,new ExpList());:}
+|
 Expressions:e1 COMMA ExpressionsList:e2
 {:RESULT = new ExpList(e1,e2);:}
 ;
+
+
 
 Expressions::=
 Expressions:expOne MINUS ExpressionsOne:expTwo
@@ -253,9 +268,12 @@ INTLIT:expInt
 /*MINUS INTLIT*/
 MINUS INTLIT:expInt
 {: RESULT= new IntExp(expIntleft,expIntright, 0 - expInt) ;:}
+<<<<<<< HEAD
 
 /*
 MINUS INTLIT:expInt
 {: RESULT = new OpExp(expIntleft,expIntright,new IntExp(left,right,0),7,expInt) ;:}
 */
+=======
+>>>>>>> a355f5d95c3c0c97d1571e201e6cec4af249ad46
 ;
