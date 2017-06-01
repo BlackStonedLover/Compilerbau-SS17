@@ -149,7 +149,7 @@ IfStmt::=IF:i LPAREN Condition:t RPAREN Stmt:s1 OptElse:s2
 {: RESULT = new IfStm (ileft,iright,t,s1,s2 );:};
 
 OptElse::=
-{: RESULT = ; :}
+
 |
 ELSE:t Stmt:s1
 {: RESULT = s1;:}
