@@ -20,23 +20,16 @@ public class Semant {
   }
 
   public Table check(Absyn program) {
-    /* generate built-in types */
-    /* setup global symbol table */
-
+    table globalTable = new TableBuilder().buildSymbolTables(program,showTables)
+    new ProcedureBodyChecker().check(program,globalTable);
+    check MainProcedure(globalTable);
 
     Table globalTable = ??;
     /* do semantic checks in 2 passes */
     /* check if "main()" is present */
     /* return global symbol table */
     return globalTable;
-
-    /* public table check(Absyn program, boolean showtables){
-    table globalTable = new TableBuilder().buildSymbolTables(program,showTables)
-    new ProcedureBodyChecker().check(program,globalTable)
-    check MainProcedure(globalTable),
-    return globalTable
     }
-    */
 
     // check Class(Object,Class<?>,String errorMsg, int lineNo)
     // check Main Procedure
