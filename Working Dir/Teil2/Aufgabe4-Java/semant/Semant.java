@@ -10,11 +10,11 @@ import sym.Sym;
 import table.*;
 import types.*;
 
-
 public class Semant {
 
   private boolean showTables;
-
+  static final Type intType = new PrimitiveType("int",VarAllocator,INTBYTESIZE);
+  
   public Semant(boolean s) {
     showTables = s;
   }
@@ -24,9 +24,14 @@ public class Semant {
     /* setup global symbol table */
 
 
+       
     Table globalTable = new TableBuilder().buildSymbolTables(program,showTables);
-    /* do semantic checks in 2 passes */
+/* do semantic checks in 2 passes */
+
+
+    new ProcedureBodyChecker().check(program,globalTable);
     /* check if "main()" is present */
+     check MainProcedure(globalTable);
     /* return global symbol table */
     return globalTable;
 
@@ -43,23 +48,33 @@ public class Semant {
   }
 
 }
+
+
+
 class TableBuilder{
+  Table globalTable;
+  // Programm
     Table buildSymbolTables(){
-        Table globalTable = new Table()
-        new TableInitializer().initalizeSymbolTable(globalTable);
+        globalTable = new Table();
+        initalizeSymbolTable();
+
         program.accept(new TableBuilderVisitor(globalTable));
       return globalTable;
     }
+   void  initalizeSymbolTable(){
+     enter Declaration(node.name,new TypeEntry(resultType));
+     globalTable.enter(node.name ,new PrimitiveType("int"));
+   }
 }
 
 private class TableBuilderVisitor extends DoNothingVisitor{
   private Table SymTable;
   private Type resultType;
-  private ParamTypeList ParamTypeList;
+  private ParamTypeList paramTypeList;
   
     public void visit(TypeDec node){
     node.ty.accept(this);
-    enter Declaration(node.name,new TypeEntry(resultType))
+    enter Declaration(node.name,new TypeEntry(resultType));
     }
 
 }
@@ -71,12 +86,12 @@ private class TableInitializer {
   private ParamTypeList ParamTypeList;
   
   public void initalizeSymbolTable(Table globalTable){
- 
+    
   }
 
 }
 /*
-class Table Builder{
+class TableBuilder{
 ...
 Table buildSymbolTables(){
   Table globalTable = new Table()
