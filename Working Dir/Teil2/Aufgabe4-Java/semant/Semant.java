@@ -24,7 +24,7 @@ public class Semant {
     /* setup global symbol table */
 
 
-    Table globalTable = ??;
+    Table globalTable = new TableBuilder().buildSymbolTables(program,showTables);
     /* do semantic checks in 2 passes */
     /* check if "main()" is present */
     /* return global symbol table */
@@ -43,7 +43,38 @@ public class Semant {
   }
 
 }
+class TableBuilder{
+    Table buildSymbolTables(){
+        Table globalTable = new Table()
+        new TableInitializer().initalizeSymbolTable(globalTable);
+        program.accept(new TableBuilderVisitor(globalTable));
+      return globalTable;
+    }
+}
 
+private class TableBuilderVisitor extends DoNothingVisitor{
+  private Table SymTable;
+  private Type resultType;
+  private ParamTypeList ParamTypeList;
+  
+    public void visit(TypeDec node){
+    node.ty.accept(this);
+    enter Declaration(node.name,new TypeEntry(resultType))
+    }
+
+}
+
+
+private class TableInitializer {
+  private Table SymTable;
+  private Type resultType;
+  private ParamTypeList ParamTypeList;
+  
+  public void initalizeSymbolTable(Table globalTable){
+ 
+  }
+
+}
 /*
 class Table Builder{
 ...
