@@ -5,13 +5,16 @@ import types.*;
 import absyn.*;
 
 class ProcedureBodyChecker {
-
+	
 	void check(Absyn program, Table globalTable) {
 		program.accept(new CheckVisitor(globalTable));
 	}
 
 	private class CheckVisitor extends DoNothingVisitor {
-
+		Table globalTable;
+		CheckVisitor(Table globalTable){
+			this.globalTable = globalTable;
+		}
 		public void visit(ProcDec procDec) {
 
 		}
@@ -28,17 +31,30 @@ class ProcedureBodyChecker {
 //1. Schritt ist die Prozedur dekleriert Look up
 // Eintrag der Prozedur in der globalTable suchen
 // daraus erhalten wir => paramTypeList + localTable
+	Entry e = globalTable.lookup(node);
 
 //2 Listen Abgleichen: paramTypeList | node.args
 // z.B. for-Schleife
 // Für jede Parameterposition:
 //Typ des aktuellen Arguements berechnen
-arg.accept(this); // zu finden danach in resultType
+for(ParamTypeList p : e){
+	if(p == node.args[0]){
+		arg.accept(this); // zu finden danach in resultType
+		instance.of(VarExp); // checkclass
+		if(node.next != null){
+
+			// Überprüfen ob die andere Liste .hasNext()? weiter mit Next: Fehler! Abbruch
+		}
+		else // error
+	}
+	else // Error
+}
+
 //Abgleich mit dem Type aus der paramTypeList wenn gleich ok ansonsten fehler
 //Typen vergleichen
 // bei isref = true => Prüfen ob variable übergeben wurde!
-instance.of(VarExp); // checkclass
-// Überprüfen ob die andere Liste .hasNext()? weiter mit Next: Fehler! Abbruch
+
+
 /*
 */
 

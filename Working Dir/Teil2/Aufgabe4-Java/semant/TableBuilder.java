@@ -10,11 +10,6 @@ class TableBuilder {
 	private boolean showTables;
 
 	Table buildSymbolTables(Absyn program, boolean showTables) {
-	    globalTable = new Table();
-        new TableInitializer().intializeSymbolTable();
-
-        program.accept(new TableBuilderVisitor(globalTable));
-      return globalTable;
 	}
 
 	private class TableBuilderVisitor extends DoNothingVisitor {

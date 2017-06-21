@@ -14,6 +14,9 @@ class TableBuilder {
 
 	private class TableBuilderVisitor extends DoNothingVisitor {
 
+		Type resultType;
+		Table table;
+
 		public void visit(DecList list) {
 		list.ListNode.accept(this);
 
@@ -41,8 +44,10 @@ class TableBuilder {
 		}
 
 		public void visit(ParDec node) {
-		node.VarDec.accept(this);
-
+		node.ty.accept(this);
+		if(!node.isRef)SemanticChecker.checkClass(resultType,PrimitiveType.class," parameter "+ node.name + " must be a reference parameter in line " + node.row);
+		paramTypeList.add(new ParamTyp(resultType),node.isRef);
+		table.enter(new VarEntry(node.name,node.isRef),"redeclaration of "+ node.name + " as parameter in line " + node.row);
 		}
 
 		public void visit(VarDec node) {
