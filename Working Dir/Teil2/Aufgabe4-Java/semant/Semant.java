@@ -132,7 +132,7 @@ TypeDec : /////
 
 ProcDec :
 Eintrag aus globaler Tabelle holen:
-  -lokeale Tabelle
+  -lokale Tabelle
   -Parametertypliste
 Rumpf checken(accept)
 
