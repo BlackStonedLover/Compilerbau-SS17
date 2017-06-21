@@ -75,6 +75,11 @@ public void visit(TypeDec node){
   localTable.enter(new VarEntry(resultType,node.isRef),false);
   }
 
+  public void visit(ArrayType node){
+  node.ty.accept(this);
+  localTable.enter(new VarEntry(resultType,node.isRef),false);
+  }
+
 
 }
 
@@ -160,7 +165,7 @@ TypeDec : /////
 
 ProcDec :
 Eintrag aus globaler Tabelle holen:
-  -lokale Tabelle
+  -lokeale Tabelle
   -Parametertypliste
 Rumpf checken(accept)
 
