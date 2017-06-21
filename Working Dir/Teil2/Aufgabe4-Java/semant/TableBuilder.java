@@ -10,6 +10,13 @@ class TableBuilder {
 	private boolean showTables;
 
 	Table buildSymbolTables(Absyn program, boolean showTables) {
+<<<<<<< HEAD
+=======
+	    globalTable = new Table();
+      new TableInitializer().intializeSymbolTable();
+			program.accept(new TableBuilderVisitor(globalTable));
+      return globalTable;
+>>>>>>> eb11e961e348779dbbfa196fcba229a5e93fba91
 	}
 
 	private class TableBuilderVisitor extends DoNothingVisitor {
@@ -47,7 +54,7 @@ class TableBuilder {
 
 		public void visit(ParDec node) {
 		node.VarDec.accept(this);
-
+		resultType = new VarDec(node.name, resultType);
 		}
 
 		public void visit(VarDec node) {

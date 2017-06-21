@@ -26,16 +26,12 @@ public class SemanticChecker {
 	public Table check(Absyn program, boolean showTables) {
            /* Semantische Prüfung */
     /* generate built-in types */
-    /* setup global symbol table */       
+    /* setup global symbol table */
     Table globalTable = new TableBuilder().buildSymbolTables(program,showTables);
-    /* do semantic checks in 2 passes */
-
-
-    new ProcedureBodyChecker().check(program,globalTable);
-    /* check if "main()" is present */
-     checkMainProcedure(globalTable);
-    /* return global symbol table */
+		new ProcedureBodyChecker().check(program,globalTable);
+    checkMainProcedure(globalTable);
     return globalTable;
+
 
            /* hier gibts noch was zu tun: das Meiste kann an Visitor-Objekte delegiert werden */
 	}
