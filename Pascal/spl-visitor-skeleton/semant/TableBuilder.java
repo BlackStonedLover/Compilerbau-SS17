@@ -39,9 +39,14 @@ class TableBuilder {
 		}
 
 		public void visit(ProcDec node) {
-		node.ty.accept(this);
-		enter Declaration(node.name,new TypeEntry(resultType));
+		localTable = new Table(globalTable);
+		paramypeList = new ParamTypeList();
+		node.params.accept(this);
+		node.vars.accept(this);
+		//enter Declaration(node.name,new TypeEntry(resultType));
+		gloabalTable.enter(node.name,new ProcEntry(paramTypeList,localTable),"redeclaration of " + node.name + " as procedure in line " + node.row);
 		}
+
 
 		public void visit(ParDec node) {
 		node.ty.accept(this);
