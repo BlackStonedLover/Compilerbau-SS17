@@ -15,7 +15,8 @@ class TableBuilder {
 	private class TableBuilderVisitor extends DoNothingVisitor {
 
 		Type resultType;
-		Table table;
+		Table localTable;
+		ParamTypeList paramTypeList;
 
 		public void visit(DecList list) {
 			for (Absyn elem: list)
@@ -24,7 +25,7 @@ class TableBuilder {
 
 		public void visit(TypeDec node) {
 		node.ty.accept(this);
-		enter Declaration(node.name,new TypeEntry(resultType));
+		globalTable.enter(node.name,new TypeEntry(resultType)); //redeclaraiton of type
 		}
 
 		public void visit(NameTy node) {
@@ -41,7 +42,7 @@ class TableBuilder {
 		public void visit(ProcDec node) {
 
 		localTable = new Table(globalTable);
-		paramypeList = new ParamTypeList();
+		paramTypeList = new ParamTypeList();
 		node.params.accept(this);
 		node.vars.accept(this);
 		//enter Declaration(node.name,new TypeEntry(resultType));
@@ -53,12 +54,12 @@ class TableBuilder {
 		node.ty.accept(this);
 		if(!node.isRef)SemanticChecker.checkClass(resultType,PrimitiveType.class," parameter "+ node.name + " must be a reference parameter in line " + node.row);
 		paramTypeList.add(new ParamTyp(resultType),node.isRef);
-		table.enter(new VarEntry(node.name,node.isRef),"redeclaration of "+ node.name + " as parameter in line " + node.row);
+		localTable.enter(new VarEntry(node.name,node.isRef),"redeclaration of "+ node.name + " as parameter in line " + node.row);
 		}
 
 		public void visit(VarDec node) {
 		node.ty.accept(this);
-		enter Declaration(node.name,new TypeEntry(resultType),);
+		localTable.enter(node.name,new TypeEntry(resultType),); //redec of var
 		}
 	}
 }
