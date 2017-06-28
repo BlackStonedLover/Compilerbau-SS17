@@ -18,8 +18,8 @@ class TableBuilder {
 		Table table;
 
 		public void visit(DecList list) {
-		list.ListNode.accept(this);
-
+			for (Absyn elem: list)
+				elem.accept(this);
 		}
 
 		public void visit(TypeDec node) {
@@ -28,8 +28,8 @@ class TableBuilder {
 		}
 
 		public void visit(NameTy node) {
-		Entry e = sym.Table.getDeclaration(node.name,errorMsg)
-		SemanticCheck.checkclass(e,TypeEntry.class,errorMsg)
+		Entry e = sym.Table.getDeclaration(node.name,"undefined procedure "+ node.name +" in line "+node.row)
+		SemanticCheck.checkclass(e,TypeEntry.class,e + " is not a type in line "+ e.row)
 		resultType = (TypeEntry)e type;
 		}
 
@@ -40,7 +40,7 @@ class TableBuilder {
 
 		public void visit(ProcDec node) {
 		node.ty.accept(this);
-		enter Declaration(node.name,new TypeEntry(resultType));
+		enter Declaration(node.name,new TypeEntry(resultType),"procedure "+node.name+ "called with too few arguments in line "+node.row,"procedure "+node.name+" called with too many arguments in line "+node.row);
 		}
 
 		public void visit(ParDec node) {
@@ -52,7 +52,7 @@ class TableBuilder {
 
 		public void visit(VarDec node) {
 		node.ty.accept(this);
-		enter Declaration(node.name,new TypeEntry(resultType));
+		enter Declaration(node.name,new TypeEntry(resultType),);
 		}
 	}
 }
