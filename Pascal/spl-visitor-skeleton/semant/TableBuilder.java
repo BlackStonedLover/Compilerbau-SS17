@@ -25,7 +25,7 @@ class TableBuilder {
 
 		public void visit(TypeDec node) {
 		node.ty.accept(this);
-		globalTable.enter(node.name,new TypeEntry(resultType)); //redeclaraiton of type
+		globalTable.enter(node.name,new TypeEntry(resultType),"redeclaraiton of "+ node.name+" as type in line "+node.name);
 		}
 
 		public void visit(NameTy node) {
@@ -45,7 +45,6 @@ class TableBuilder {
 		paramTypeList = new ParamTypeList();
 		node.params.accept(this);
 		node.vars.accept(this);
-		//enter Declaration(node.name,new TypeEntry(resultType));
 		gloabalTable.enter(node.name,new ProcEntry(paramTypeList,localTable),"redeclaration of " + node.name + " as procedure in line " + node.row);
 		}
 
@@ -59,7 +58,7 @@ class TableBuilder {
 
 		public void visit(VarDec node) {
 		node.ty.accept(this);
-		localTable.enter(node.name,new TypeEntry(resultType),); //redec of var
+		localTable.enter(node.name,new TypeEntry(resultType),"redeclaration of "+ node.name+" as variable in line "+node.row);
 		}
 	}
 }
