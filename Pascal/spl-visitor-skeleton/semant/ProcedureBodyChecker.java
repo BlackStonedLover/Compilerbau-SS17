@@ -11,7 +11,9 @@ class ProcedureBodyChecker {
 	}
 
 	private class CheckVisitor extends DoNothingVisitor {
-
+		Typ resultType;
+		Table localTable;
+		ParamTypeList paramTypeList; 
 		public void visit(ProcDec procDec) {
 
 		}
@@ -25,6 +27,35 @@ class ProcedureBodyChecker {
 
 		}
 		public void visit(CallStm node) {
+		//1. Schritt ist die Prozedur dekleriert Look up
+		// Eintrag der Prozedur in der globalTable suchen
+		// daraus erhalten wir => paramTypeList + localTable
+		node.lookUp();
+		for(Typ arg:node.args){
+			if()
+			arg.accept(this);
+
+			if(arg.isref) instance.of(VarExp);
+
+			if(!paramTypeList.hasNext())
+			//Fehler paramTypeList hat weitere Einträge
+			break;
+		}
+		//2 Listen Abgleichen: paramTypeList | node.args
+		// z.B. for-Schleife
+		// Für jede Parameterposition:
+		//Typ des aktuellen Arguements berechnen
+		//arg.accept(this); // zu finden danach in resultType
+		//Abgleich mit dem Type aus der paramTypeList wenn gleich ok ansonsten fehler
+		//Typen vergleichen
+		// bei isref = true => Prüfen ob variable übergeben wurde!
+		instance.of(VarExp); // checkclass
+		// Überprüfen ob die andere Liste .hasNext()? weiter mit Next: Fehler! Abbruch
+		/*
+		*/
+
+
+		//2. ? Schritt schauen ob der Eintrag instance of ProcDec ist oder ob wir es finden
 
 		}
 		public void visit(CompStm node) {
