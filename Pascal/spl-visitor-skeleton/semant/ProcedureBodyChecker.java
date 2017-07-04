@@ -59,7 +59,8 @@ class ProcedureBodyChecker {
 
 		}
 		public void visit(CompStm node) {
-
+		node.lookUp();
+		//überprüfe
 		}
 		public void visit(DecList node) {
 
@@ -104,6 +105,9 @@ class ProcedureBodyChecker {
 
 		}
 		public void visit(WhileStm node) {
+		node.test.accept(this);
+		checkType(boolType,"Fehlermeldung",node.row);
+		node.body.accept(this);
 
 		}
 
