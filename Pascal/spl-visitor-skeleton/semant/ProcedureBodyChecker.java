@@ -32,11 +32,13 @@ class ProcedureBodyChecker {
 		// daraus erhalten wir => paramTypeList + localTable
 		node.lookUp();
 		for(Typ arg:node.args){
-			if()
+			check.Type(intType,ArrayType,errorMsg,node.row) // intType,ArrayType so nicht richtig?
 			arg.accept(this);
-
+			if (Type of paramTypeList != resultType)
+			//Fehler
 			if(arg.isref) instance.of(VarExp);
-
+			if (arg.isref = varExp) // dann richtig, ansonsten fehler?
+			
 			if(!paramTypeList.hasNext())
 			//Fehler paramTypeList hat weitere Einträge
 			break;
