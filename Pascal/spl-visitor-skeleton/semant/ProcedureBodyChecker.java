@@ -15,16 +15,21 @@ class ProcedureBodyChecker {
 		Table localTable;
 		ParamTypeList paramTypeList; 
 		public void visit(ProcDec procDec) {
-
+			procDec.name.accept(this);
+			procDec.params.accept(this);
+			procDec.decls.accept(this);
+			procDec.body.accept(this);
 		}
 		public void visit(ArrayTy node) {
-
+			node.baseTy.accept(this);
 		}
 		public void visit(ArrayVar node) {
-
+			node.var.accept(this);
+			node.index.accept(this);
 		}
 		public void visit(AssignStm node) {
-
+			node.var.accept(this);
+			node.exp.accept(this);
 		}
 		public void visit(CallStm node) {
 		//1. Schritt ist die Prozedur dekleriert Look up
@@ -68,42 +73,64 @@ class ProcedureBodyChecker {
 
 		}
 		public void visit(CompStm node) {
-		node.lookUp();
-		//überprüfe
+			node.stms.accept(this);
 		}
 		public void visit(DecList node) {
-
+			node.accept(this);
 		}
 		public void visit(EmptyStm node) {
-			
+			/*Bleibt leer*/
 		}
 		public void visit(ExpList node) {
-
+			node.accept(this);
 		}
 		public void visit(IfStm node) {
-
+			node.test.accept(this);
+			SemanticChecker.checkclass(node.test.dataType,SemanticChecker.boolType,"not a bool",node.row);
+			node.thenPart.accept(this);
+			node.elsePart.accept(this);
 		}
 		public void visit(IntExp node) {
-
+		node.val.accept(this);
 		}
 		public void visit(NameTy node) {
-
+		node.name.accept(this);
 		}
 		public void visit(OpExp node) {
-
+			node.op.accept(this);
+			switch(node.op){
+				case EQU:
+				case NEQ:
+				case LST:
+				case LASE
+				case GRT:
+				case GRE:
+				node.left.accept(this);
+				node.right.accept(this);
+				SemanticChecker.checkclass(resultType.SemanticChecker.boolType,"kein bergleich",node.row);
+							case EQU:
+				case ADD:
+				case SU:
+				case MUL
+				case DIV:
+				node.left.accept(this);
+				node.right.accept(this);
+				SemanticChecker.checkclass(resultType.SemanticChecker.intType,"keine zahlen",node.row);
+				
+			}
 		}
 		public void visit(ParDec node) {
-			Entry e = node.lookUp();
-			if(e == null)
-			//SemanticChecker.checkclass(node,ParDec.class,)
 			node.accept(this);
 			else throw new RuntimeException("redeclaration of " + node.name + " as parameter in line " + node.row);
 		}
 		public void visit(ProcDec node) {
-
+			node.name.accept(this);
+			node.params.accept(this);
+			node.decls.accept(this);
+			node.body.accept(this);
 		}
 		public void visit(SimpleVar node) {
-
+			node.name.accept(this);
 		}
 		public void visit(StmList node) {
 			node.accept(this);
@@ -112,16 +139,18 @@ class ProcedureBodyChecker {
 			/*Bleibt leer*/
 		}
 		public void visit(VarDec node) {
-			Entry e = node.lookUp();
+			node.name.accept(this);
+			node.ty.accept(this);
+		/*	Entry e = node.lookUp();
 			if(e == null){
 			SemanticChecker.checkclass(node.ty,TypeDec.class,"undefined type",nod.row);
 			node.accept(this);
 			}
 			else throw new RuntimeException("redeclaration of " + node.name + " as variable in line " + node.row);
-	
+	*/
 		}
 		public void visit(VarExp node) {
-
+			node.var.accept(this);
 		}
 		public void visit(WhileStm node) {
 		node.test.accept(this);
