@@ -11,7 +11,7 @@ class ProcedureBodyChecker {
 	}
 
 	private class CheckVisitor extends DoNothingVisitor {
-		Typ resultType;
+		Type resultType;
 		Table localTable;
 		ParamTypeList paramTypeList; 
 		public void visit(ProcDec procDec) {
@@ -30,18 +30,25 @@ class ProcedureBodyChecker {
 		//1. Schritt ist die Prozedur dekleriert Look up
 		// Eintrag der Prozedur in der globalTable suchen
 		// daraus erhalten wir => paramTypeList + localTable
-		node.lookUp();
-		for(Typ arg:node.args){
-			check.Type(intType,ArrayType,errorMsg,node.row) // intType,ArrayType so nicht richtig?
+		
+		Entry e = node.lookUp(node.name);
+		if(e == null)throw new RuntimeException("is not declared yet");
+		SemanticChecker.checkclass(node,ProcDec.class,"Is not a proc dec",node.row);
+		paramTypeList = e.paramTypes;
+		localTable = e.localTable;
+		
+		
+		
+		for(int i =0; i<node.args.size();i++){
+			//SemanticChecker.check(intType,ArrayType,errorMsg,node.row) // intType,ArrayType so nicht richtig?
 			arg.accept(this);
-			if (Type of paramTypeList != resultType)
-			//Fehler
-			if(arg.isref) instance.of(VarExp);
-			if (arg.isref = varExp) // dann richtig, ansonsten fehler?
-			
-			if(!paramTypeList.hasNext())
-			//Fehler paramTypeList hat weitere Einträge
-			break;
+			SemanticChecker.check(node.args[i],paramTypeList[i],"error msg", node.row);
+			if(node.args[i].isref) SemanticChecker.checkclass(node.args[i],VarExp.class,"ErrorMsg",node.row);			
+			if(paramTypeList[i+1]==null  node.args[i+1]!=null){
+					throw new RuntimeException("has less arguments...");
+			}else if(paramTypeList[i+1]!=null  node.args[i+1]==null){
+					throw new RuntimeException("has less arguments...");
+			}
 		}
 		//2 Listen Abgleichen: paramTypeList | node.args
 		// z.B. for-Schleife
@@ -51,7 +58,7 @@ class ProcedureBodyChecker {
 		//Abgleich mit dem Type aus der paramTypeList wenn gleich ok ansonsten fehler
 		//Typen vergleichen
 		// bei isref = true => Prüfen ob variable übergeben wurde!
-		instance.of(VarExp); // checkclass
+		//instance.of(VarExp); // checkclass
 		// Überprüfen ob die andere Liste .hasNext()? weiter mit Next: Fehler! Abbruch
 		/*
 		*/
@@ -68,7 +75,7 @@ class ProcedureBodyChecker {
 
 		}
 		public void visit(EmptyStm node) {
-
+			
 		}
 		public void visit(ExpList node) {
 
@@ -86,7 +93,11 @@ class ProcedureBodyChecker {
 
 		}
 		public void visit(ParDec node) {
-
+			Entry e = node.lookUp();
+			if(e == null)
+			//SemanticChecker.checkclass(node,ParDec.class,)
+			node.accept(this);
+			else throw new RuntimeException("redeclaration of " + node.name + " as parameter in line " + node.row);
 		}
 		public void visit(ProcDec node) {
 
@@ -95,23 +106,30 @@ class ProcedureBodyChecker {
 
 		}
 		public void visit(StmList node) {
-
+			node.accept(this);
 		}
 		public void visit(TypeDec node) {
-
+			/*Bleibt leer*/
 		}
 		public void visit(VarDec node) {
-
+			Entry e = node.lookUp();
+			if(e == null){
+			SemanticChecker.checkclass(node.ty,TypeDec.class,"undefined type",nod.row);
+			node.accept(this);
+			}
+			else throw new RuntimeException("redeclaration of " + node.name + " as variable in line " + node.row);
+	
 		}
 		public void visit(VarExp node) {
 
 		}
 		public void visit(WhileStm node) {
 		node.test.accept(this);
-		checkType(boolType,"Fehlermeldung",node.row);
+		SemanticChecker.checkType(resultType,boolType,"'while' test expression must be of type boolean ",node.row);
 		node.body.accept(this);
 
 		}
+	
 
 	}
 }

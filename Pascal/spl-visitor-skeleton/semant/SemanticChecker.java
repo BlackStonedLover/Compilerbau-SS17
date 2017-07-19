@@ -37,7 +37,10 @@ public class SemanticChecker {
 		if (object.getClass()!=expectedClass)
 			throw new RuntimeException(errorMessage);
 	}
-
+	static void checkType(Type got, Type expected, String error, int row ){
+		if(got != expected)
+		throw new RuntimeException(error + " in line " + row);
+	}
 	private void checkMainProcedure(Table globalTable) {
            /* hier gibts noch was zu tun! */
 	}

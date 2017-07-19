@@ -33,7 +33,6 @@ public class SemanticChecker {
     return globalTable;
 
 
-           /* hier gibts noch was zu tun: das Meiste kann an Visitor-Objekte delegiert werden */
 	}
 
 	static void checkClass (Object object, Class<?> expectedClass, String errorMessage, int lineNo)  {

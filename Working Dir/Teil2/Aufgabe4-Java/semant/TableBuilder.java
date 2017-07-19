@@ -8,37 +8,31 @@ import absyn.*;
 class TableBuilder {
 
 	private boolean showTables;
-
+	Table globalTable;
 	Table buildSymbolTables(Absyn program, boolean showTables) {
-<<<<<<< HEAD
-=======
-	    globalTable = new Table();
-      new TableInitializer().intializeSymbolTable();
+	globalTable = new Table();
+    new TableInitializer().intializeSymbolTable();
 			program.accept(new TableBuilderVisitor(globalTable));
       return globalTable;
->>>>>>> eb11e961e348779dbbfa196fcba229a5e93fba91
 	}
 
 	private class TableBuilderVisitor extends DoNothingVisitor {
-	  private Table SymTable;
+	  private Table localTable;
 	  private Type resultType;
 	  private ParamTypeList paramTypeList;
+
 		public void visit(DecList list) {
 		list.ListNode.accept(this);
-
 		}
 
 		public void visit(TypeDec node) {
 		node.ty.accept(this);
-			if(node.instance.of(IntExp)){
-				paramTypeList.add(new ParamTyp(resultType),node.isRef);
-				SymTable.enter(new VarEntry(resultType,node.isRef));
-			}
-		}
+		globalTable.enter(node.name, new TypeEntry(resultType),"redeclaration of " + node.name + " as type in line ", node.row);		
+		
 
 		public void visit(NameTy node) {
-		Entry e = sym.Table.getDeclaration(node.name,errorMsg)
-		SemanticCheck.checkclass(e,TypeEntry.class,errorMsg)
+		Entry e = localTable.getDeclaration(node.name,"undefined variable " + node.name + " in line " + node.row);
+		SemanticChecker.checkClass(e,TypeEntry.class,"assignment has different types in line",node.row);
 		resultType = (TypeEntry)e type;
 		}
 
@@ -48,18 +42,23 @@ class TableBuilder {
 		}
 
 		public void visit(ProcDec node) {
-		node.ty.accept(this);
-		enter Declaration(node.name,new TypeEntry(resultType));
+		localTable = new Table(globalTable);
+		paramTypeList = new ParamTypeList();
+		node.params.accept(this);
+		node.vars.accept(this);
+		globalTable.enter(node.name,new ProcEntry(paramTypeList,localTable),errorMsg);
 		}
 
 		public void visit(ParDec node) {
-		node.VarDec.accept(this);
-		resultType = new VarDec(node.name, resultType);
+		node.ty.accept(this);
+		SemanticChecker.checkClass(resultType,IntExp,"errorMsg",node.row);
+		paramTypeList.add(new ParamType(resultType),node.isRef);
+		localTable.enter(node.name,new VarEntry(resultType,node.isRef));
 		}
 
 		public void visit(VarDec node) {
 		node.ty.accept(this);
-		enter Declaration(node.name,new TypeEntry(resultType));
+		localTable.enter(node.name,new VarEntry(resultType,false),"redeclaration of "+ node.name +" as variable in line " + node.row);
 		}
 	}
 }
